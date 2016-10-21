@@ -1,11 +1,7 @@
 <?php
 
-
-/**
- * @package SolusVM > WHMCS callback script
- * @author Soluslabs Ltd
- * @version 1.1 2014-03-03
- */
+// it needs to be removed
+exit();
 
 /**
  * @var $admin_user
@@ -19,14 +15,14 @@ $admin_user = "admin";
  * The hash as shown in SolusVM.
  */
 
-$security_hash = "f717d372d5ca999a15b2a6fe076d5b6dddae726f";
+$security_hash = "xxx";
 
 /**
  * @var $connection_ip
  * The ip address of your SolusVM master.
  */
 
-$connection_ip = "192.168.59.3";
+$connection_ip = "xxx";
 
 
 /**
@@ -41,14 +37,6 @@ $hash      = isset( $_POST["hash"] ) ? $_POST["hash"] : "";
 $action    = isset( $_POST["action"] ) ? $_POST["action"] : "";
 $vserverid = isset( $_POST["vserverid"] ) ? (int) $_POST["vserverid"] : "";
 $extra     = isset( $_POST["data"] ) ? $_POST["data"] : "";
-/*logModuleCall(
-    'callback',
-    'action',
-    $_POST,
-    $_SERVER,
-    ''
-);
-*/
 
 $extra_var = array();
 if ( $extra ) {
