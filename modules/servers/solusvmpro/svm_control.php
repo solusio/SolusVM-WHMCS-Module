@@ -161,12 +161,12 @@ if ( $r["status"] == "success" ) {
         }
 
         if ( $r["type"] == "openvz" || $r["type"] == "xen" ) {
-            $html5Console = '<button type="button" style="width: 165px" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/html5console.php?id=' . $serviceid . '\', \'_blank\',\'width=880,height=600,status=no,resizable=yes,copyhistory=no,location=no,toolbar=no,menubar=no,scrollbars=1\')">
+            $html5Console = '<button type="button" style="width: 165px" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/html5console.php?id=' . $serviceid . '&uid='.$uid.'\', \'_blank\',\'width=880,height=600,status=no,resizable=yes,copyhistory=no,location=no,toolbar=no,menubar=no,scrollbars=1\')">
             ' . $_LANG['solusvmpro_html5Console'] . '</button>';
         }
 
         if ( $r["type"] == "openvz" || $r["type"] == "xen" ) {
-            $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/console.php?id=' . $serviceid . '\', \'_blank\',\'width=830,height=750,status=no,location=no,toolbar=no,scrollbars=1,menubar=no\')">' . $_LANG["solusvmpro_serialConsole"] . '</button>';
+            $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/console.php?id=' . $serviceid . '&uid='.$uid.'\', \'_blank\',\'width=830,height=750,status=no,location=no,toolbar=no,scrollbars=1,menubar=no\')">' . $_LANG["solusvmpro_serialConsole"] . '</button>';
             $cpass   = '';
         } else {
             $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/vnc.php?id=' . $serviceid . '\', \'_blank\',\'width=800,height=600,status=no,location=no,toolbar=no,menubar=no,,scrollbars=1,resizable=yes\')">' . $_LANG['solusvmpro_vnc'] . '</button>';

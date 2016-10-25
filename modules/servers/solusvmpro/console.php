@@ -27,16 +27,19 @@ echo '
 
 $ca = new WHMCS_ClientArea();
 if ( ! $ca->isLoggedIn() ) {
-    echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
-    exit();
+    if((!isset($_SESSION['adminid']) || ((int)$_SESSION['adminid'] <= 0))){
+        echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
+        exit();
+    }
+    $uid = (int)$_GET['uid'];
+}else{
+    $uid = $ca->getUserID();
 }
 $servid = (int) $_GET['id'];
 if ( $servid == "" ) {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
     exit();
 }
-
-$uid = $ca->getUserID();
 
 $params = SolusVM::getParamsFromServiceID( $servid, $uid );
 if ( $params === false ) {

@@ -24,7 +24,7 @@ SolusVM::loadLang();
 
 function initConfigOption()
 {
-    $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->get();
+    $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get();
     $packageconfigoption = [];
     if(is_array($data) && count($data) > 0) {
         $packageconfigoption[1] = $data[0]->configoption1;

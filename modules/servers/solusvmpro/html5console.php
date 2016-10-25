@@ -1,7 +1,7 @@
 <?php
 
-define( "CLIENTAREA", true );
-require( "../../../init.php" );
+define("CLIENTAREA", true);
+require("../../../init.php");
 
 require_once __DIR__ . '/lib/Curl.php';
 require_once __DIR__ . '/lib/CaseInsensitiveArray.php';
@@ -54,56 +54,60 @@ SolusVM::loadLang();
 <?php
 
 $ca = new WHMCS_ClientArea();
-if ( ! $ca->isLoggedIn() ) {
-    echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
-    exit();
+if (!$ca->isLoggedIn()) {
+    if ((!isset($_SESSION['adminid']) || ((int)$_SESSION['adminid'] <= 0))) {
+        echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
+        exit();
+    }
+    $uid = (int)$_GET['uid'];
+} else {
+    $uid = $ca->getUserID();
 }
-$servid = (int) $_GET['id'];
-if ( $servid == "" ) {
+
+$servid = (int)$_GET['id'];
+if ($servid == "") {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
     exit();
 }
 
-$uid = $ca->getUserID();
-
-$params = SolusVM::getParamsFromServiceID( $servid, $uid );
-if ( $params === false ) {
+$params = SolusVM::getParamsFromServiceID($servid, $uid);
+if ($params === false) {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_vserverNotFound'] . '</div></body>';
     exit;
 }
-$solusvm = new SolusVM( $params );
+$solusvm = new SolusVM($params);
 
-if ( $solusvm->getExtData( "clientfunctions" ) == "disable" ) {
+if ($solusvm->getExtData("clientfunctions") == "disable") {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_functionDisabled'] . '</body>';
     exit;
 }
-if ( $solusvm->getExtData( "html5serialconsole" ) == "disable" ) {
+if ($solusvm->getExtData("html5serialconsole") == "disable") {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_functionDisabled'] . '</body>';
     exit;
 }
 
 ################### Code ###################
 
-if ( isset( $_POST["sessioncancel"] ) ) {
-    $callArray = array( "access" => "disable", "vserverid" => $params['vserver'] );
-} elseif ( isset( $_POST["sessioncreate"] ) ) {
+if (isset($_POST["sessioncancel"])) {
+    $callArray = array("access" => "disable", "vserverid" => $params['vserver']);
+} elseif (isset($_POST["sessioncreate"])) {
     $stime = $_POST["sessiontime"];
-    if ( ! is_numeric( $stime ) ) {
+    if (!is_numeric($stime)) {
         exit();
     } else {
-        $callArray = array( "access" => "enable", "time" => $stime, "vserverid" => $params['vserver'] );
+        $callArray = array("access" => "enable", "time" => $stime, "vserverid" => $params['vserver']);
     }
 } else {
     ## The call string for the connection function
-    $callArray = array( "vserverid" => $params['vserver'] );
+    $callArray = array("vserverid" => $params['vserver']);
 }
 
-$solusvm->apiCall( 'vserver-console', $callArray );
+$solusvm->apiCall('vserver-console', $callArray);
 $r = $solusvm->result;
 
-if ( $r["status"] == "success" ) {
-    if ( $r["sessionactive"] == "1" ) {
-        if ( $r["type"] != "openvz" && $r["type"] != "xen" ) {
+if ($r["status"] == "success") {
+    if ($r["sessionactive"] == "1") {
+        if ($r["type"] != "openvz" && $r["type"] != "xen") {
             exit();
         }
 
@@ -112,7 +116,8 @@ if ( $r["status"] == "success" ) {
         ?>
 
         <div align="center">
-            <p style="padding-bottom: 5px"><?php echo $_LANG['solusvmpro_password'] . ': ' . $r['consolepassword']; ?></p><br>
+            <p style="padding-bottom: 5px"><?php echo $_LANG['solusvmpro_password'] . ': ' . $r['consolepassword']; ?></p>
+            <br>
         </div>
     <br>
         <form action="" method="post" name="cancelsession">
@@ -123,13 +128,16 @@ if ( $r["status"] == "success" ) {
 
         <div
             style="margin: auto;background-color: #454545;width: 800px;padding:10px 10px 0 10px;font-family: 'Source Code Pro', monospace;color:#fff;">
-            <div style="display:inline-block;width:100%;border-bottom: 1px solid #ffffff;font-size: 14px;padding-bottom:10px">
+            <div
+                style="display:inline-block;width:100%;border-bottom: 1px solid #ffffff;font-size: 14px;padding-bottom:10px">
                 <div style="float: left">Secure Shell Terminal: vt220</div>
                 <div style="float: right;margin-left: 10px; cursor: pointer">
-                    <i title="<?php echo $_LANG['solusvmpro_quit']; ?>" onclick="window.close();" class="fa fa-times-circle"></i>
+                    <i title="<?php echo $_LANG['solusvmpro_quit']; ?>" onclick="window.close();"
+                       class="fa fa-times-circle"></i>
                 </div>
                 <div style="float: right;margin-left: 10px ; cursor: pointer">
-                    <i title="<?php echo $_LANG['solusvmpro_reconnect']; ?>" onclick=" open_terminal({connectionkey: '<?= $r['key']; ?>'});"
+                    <i title="<?php echo $_LANG['solusvmpro_reconnect']; ?>"
+                       onclick=" open_terminal({connectionkey: '<?= $r['key']; ?>'});"
                        class="fa fa-refresh"></i>
                 </div>
                 <div style="float: right;margin-left: 10px; cursor: pointer">
@@ -264,8 +272,10 @@ if ( $r["status"] == "success" ) {
                             <option value="8">8 <?php echo $_LANG['solusvmpro_hours']; ?></option>
                         </select>
                     </div>
-                    <button name="sessioncreate" type="submit" class="btn btn-success"><?php echo $_LANG['solusvmpro_createSession']; ?></button>
-                    <button type="button" class="btn btn-danger" onclick="window.close()"><?php echo $_LANG['solusvmpro_closeWindow']; ?></button>
+                    <button name="sessioncreate" type="submit"
+                            class="btn btn-success"><?php echo $_LANG['solusvmpro_createSession']; ?></button>
+                    <button type="button" class="btn btn-danger"
+                            onclick="window.close()"><?php echo $_LANG['solusvmpro_closeWindow']; ?></button>
                 </form>
             </div>
             <div class="col-xs-2"></div>
@@ -276,8 +286,8 @@ if ( $r["status"] == "success" ) {
 
 
 } else {
-    if ( isset( $r["statusmsg"] ) ) {
-        $pagedata = (string) $r["statusmsg"];
+    if (isset($r["statusmsg"])) {
+        $pagedata = (string)$r["statusmsg"];
     } else {
         $pagedata = $_LANG['solusvmpro_couldntConnectMaster'];
     }
