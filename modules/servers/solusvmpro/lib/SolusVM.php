@@ -766,7 +766,7 @@ class SolusVM {
             }
 
             $callArray = array(
-                "vserverid" => $this->getParam( "vserverid" ),
+                "vserverid" => $this->getParam( "customfields" )["vserverid"],
                 "forward"   => "1",
                 "returnurl" => $sysurl . "clientarea.php?action=productdetails&id=" . $this->getParam( 'serviceid' ),
             );
