@@ -26,6 +26,7 @@ class SolusVM {
     protected $pid;
 
     public function __construct( $params, $debug = false ) {
+
         if ( $debug === true ) {
             ini_set( 'display_errors', 1 );
             ini_set( 'display_startup_errors', 1 );
@@ -758,34 +759,9 @@ class SolusVM {
             }
 
             if ( $this->getExtData( "clientkeyauthreturnurl" ) != "" ) {
-                $sysurl                            = $this->getExtData( "clientkeyauthreturnurl" );
                 $cparams["clientkeyauthreturnurl"] = $this->getExtData( "clientkeyauthreturnurl" );
-            } else {
-                $query  = Capsule::table( 'tblconfiguration' )->where( 'setting', 'SystemURL' )->first();
-                $sysurl = $query->value;
             }
 
-            $callArray = array(
-                "vserverid" => $this->getParam( "customfields" )["vserverid"],
-                "forward"   => "1",
-                "returnurl" => $sysurl . "clientarea.php?action=productdetails&id=" . $this->getParam( 'serviceid' ),
-            );
-
-            ## Do the connection
-            if ( $_POST['logintosolusvm'] ) {
-                $this->apiCall( 'client-key-login', $callArray );
-                $slogin = $this->result;
-                if ( $slogin["status"] == "success" ) {
-
-                    $callArray = array( "vserverid" => $this->getParam( "vserverid" ) );
-                    ## Do the connection
-                    $master_url = $this->apiCall( 'fwdurl', $callArray );
-
-                    header( "Location: " . $master_url . "/auth.php?_a=" . $slogin["hasha"] . "&_b=" . $slogin["hashb"] );
-                } else {
-                    $cparams["clientkeyautherror"] = 1;
-                }
-            }
         }
 
         if ( $this->getExtData( "graphs" ) != "disable" ) {
@@ -808,6 +784,49 @@ class SolusVM {
 
         return $cparams;
     }
+
+    public function clientAreaCommands() {
+
+        if ( $_POST['logintosolusvm'] ) {
+
+            if ( $this->getExtData( "clientkeyauthreturnurl" ) != "" ) {
+                $sysurl                            = $this->getExtData( "clientkeyauthreturnurl" );
+                $cparams["clientkeyauthreturnurl"] = $this->getExtData( "clientkeyauthreturnurl" );
+            } else {
+                $query  = Capsule::table( 'tblconfiguration' )->where( 'setting', 'SystemURL' )->first();
+                $sysurl = $query->value;
+            }
+
+            $vserverID = '';
+            if ( isset( $this->getParam( "customfields" )["vserverid"] ) && $this->getParam( "customfields" )["vserverid"] !== '' ) {
+                $vserverID = $this->getParam( "customfields" )["vserverid"];
+            } else {
+                $vserverID = $this->params['vserver'];
+            }
+
+            $callArray = array(
+                "vserverid" => $vserverID,
+                "forward"   => "1",
+                "returnurl" => $sysurl . "clientarea.php?action=productdetails&id=" . $this->getParam( 'serviceid' ),
+            );
+
+            $this->apiCall( 'client-key-login', $callArray );
+            $slogin = $this->result;
+
+            if ( $slogin["status"] == "success" ) {
+
+                $callArray = array( "vserverid" => $this->getParam( "vserverid" ) );
+                ## Do the connection
+                $master_url = $this->apiCall( 'fwdurl', $callArray );
+
+                header( "Location: " . $master_url . "/auth.php?_a=" . $slogin["hasha"] . "&_b=" . $slogin["hashb"] );
+
+            } else {
+                $cparams["clientkeyautherror"] = 1;
+            }
+        }
+    }
+
 
     public static function dns_verify_rdns_section( $host = "" ) {
         $is_valid = false;

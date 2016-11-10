@@ -24,7 +24,11 @@ SolusVM::loadLang();
 
 function initConfigOption()
 {
-    $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get();
+    if(!isset($_POST['id'])){
+        $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_GET['id'])->get();
+    }else{
+        $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get();
+    }
     $packageconfigoption = [];
     if(is_array($data) && count($data) > 0) {
         $packageconfigoption[1] = $data[0]->configoption1;
@@ -960,13 +964,16 @@ function solusvmpro_ClientArea( $params ) {
 
         if ( $solusvm->getExtData( "clientfunctions" ) != "disable" ) {
 
+            $solusvm->clientAreaCommands();
+
             if ( function_exists( 'solusvmpro_customclientarea' ) ) {
-                $callArray = array( "vserverid" => $customField["vserverid"], "nographs" => true );
+                $callArray = array( "vserverid" => $customField["vserverid"], "nographs" => false );
                 $solusvm->apiCall( 'vserver-infoall', $callArray );
+
 
                 if ( $solusvm->result["status"] == "success" ) {
                     $data = $solusvm->clientAreaCalculations( $solusvm->result );
-
+                    
                     return solusvmpro_customclientarea( $params, $data );
                 } else {
                     if ( function_exists( 'solusvmpro_customclientareaunavailable' ) ) {

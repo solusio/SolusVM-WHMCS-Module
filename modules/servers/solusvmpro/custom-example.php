@@ -36,8 +36,7 @@
 #    $htmlarray["hddbar"]             = '';
 #    $htmlarray["buttons"]            = '';
 #    $htmlarray["ips"]                = '';
-#    $htmlarray["graphbutton"]        = '';
-#
+#    $htmlarray["graphs"]        = '';
 #
 #    ### Buttons ###
 #    if ( $cparams["displayreboot"] ) {
@@ -73,21 +72,21 @@
 #    if ( $cparams["displayclientkeyauth"] ) {
 #        $keylogin = '<form action="" name="solusvm" method="post"><input type="submit" class="btn-success" style="font-weight: bold;width: 135px" name="logintosolusvm" value="' . $_LANG["solusvmpro_manage"] . '"></form>';
 #    }
-#    $htmlarray["buttons"] = '<tr><td width="150" class="fieldarea">' . $_LANG["solusvmpro_options"] . ':</td><td align="left">' . $rebootbutton . '' . $shutdownbutton . '' . $bootbutton . '' . $console . '' . $vnc . '' . $rootpassword . '' . $hostname . '' . $html5console . '' . $vncpassword . '' . $cpbutton . '' . $keylogin . '</td></tr>';
+#    $htmlarray["buttons"] = '<tr><td width="150" class="fieldarea">' . $_LANG["solusvmpro_options"] . ':&nbsp;</td><td align="left">' . $rebootbutton . '' . $shutdownbutton . '' . $bootbutton . '' . $console . '' . $vnc . '' . $rootpassword . '' . $hostname . '' . $html5console . '' . $vncpassword . '' . $cpbutton . '' . $keylogin . '</td></tr>';
 #    ### Graphs ###
-#    if ( $cparams["displaygraphs"] ) {
-#        $htmlarray["graphbutton"] = '
-#            <div class="col-md-3 margin-top-20">
-#                ' . $_LANG["solusvmpro_graphs"] . '
-#            </div>
-#            <div class="col-md-9 margin-top-20">
-#                <button class="btn btn-default" id="displaygraphs"
-#                        onClick="window.open(\'modules/servers/solusvmpro/graphs.php?id=' . $params["serviceid"] . '\',\'_blank\',\'width=800,height=800,status=no,location=no,toolbar=no,scrollbars=1,menubar=no\')">
-#                    ' . $_LANG["solusvmpro_viewGraphs"] . '
-#                </button>
-#            </div>
-#        ';
-#    }
+#    $htmlarray["graphs"] = '
+#       <div class="col-md-12 margin-top-20">
+#           <img id="trafficgraphurlImg" src="'.($cparams["trafficgraphurl"]).'" alt="Traffic Graph Unavailable">
+#       </div>
+#
+#       <div class="col-md-12 margin-top-20">
+#           <img id="loadgraphurlImg" src="'.($cparams["loadgraphurl"]).'" alt="Load Graph Unavailable">
+#       </div>
+#
+#       <div class="col-md-12 margin-top-20">
+#           <img id="memorygraphurlImg" src="'.($cparams["memorygraphurl"]).'" alt="Memory Graph Unavailable">
+#       </div>';
+#
 #    ### Usage Bars ###
 #    if ( $cparams["displaybandwidthbar"] ) {
 #        $htmlarray["bandwidthbar"] = '
@@ -187,8 +186,8 @@
 #            <div class="col-md-12 margin-5-button">
 #                ' . $htmlarray["buttons"] . '
 #            </div>
+#		    ' . $htmlarray["graphs"] . '
 #		    ' . $htmlarray["ips"] . '
-#		    ' . $htmlarray["graphbutton"] . '
 #        </div>
 #    ';
 #

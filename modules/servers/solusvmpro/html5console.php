@@ -111,7 +111,11 @@ if ($r["status"] == "success") {
             exit();
         }
 
-        $host_connect = $r['consoleip'];
+        if(trim($r['consoledomain']) !=='' ){
+            $host_connect = $r['consoledomain'];
+        } else {
+            $host_connect = $r['consoleip'];
+        }
 
         ?>
 

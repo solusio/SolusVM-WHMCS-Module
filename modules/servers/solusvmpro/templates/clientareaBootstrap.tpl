@@ -50,12 +50,8 @@
                     var active = 'none';
                     document.cookie = cookieNameForAccordionGroup + "=" + active;
                 });
-
             }
-
-
         });
-
 
     </script>
 {/literal}
@@ -189,7 +185,7 @@
                     <form action="" name="solusvm" method="post">
                         <input type="submit" class="btn btn-success" name="logintosolusvm" value="{$LANG.solusvmpro_manage}">
                     </form>
-                </span>
+                </span><br/>
             </div>
         </div>
         <div class="row">
