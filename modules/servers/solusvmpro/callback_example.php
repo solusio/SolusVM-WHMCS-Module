@@ -55,7 +55,7 @@ if ( $hash != $security_hash ) {
     exit();
 }
 
-if ( ctype_digit( $vserverid ) ) {
+if ( ! is_numeric( $vserverid ) ) {
     echo "invalid vserverid";
     exit();
 }
