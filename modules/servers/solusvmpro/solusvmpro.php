@@ -646,20 +646,114 @@ function solusvmpro_ChangePackage( $params ) {
 
         $solusvm     = new SolusVM( $params );
         $customField = $solusvm->getParam( "customfields" );
+        
+        #########################################
+        ## Custom settings from config options ##
+        #########################################
 
-        ## The call string for the connection fuction
-        $callArray = array(
-            "plan"      => $params["configoption4"],
-            "type"      => $solusvm->getVT(),
-            "vserverid" => $customField["vserverid"]
-        );
+        $cmem       = $solusvm->getCmem();
+        $cdisk      = $solusvm->getCdisk();
+        $ccpu       = $solusvm->getCcpu();
+        $cextraip   = $solusvm->getCextraip();
 
-        $solusvm->apiCall( 'vserver-change', $callArray );
+        #########################################
+        
+        //Apply custom resources
+        if ( !empty($cmem) || !empty($cdisk) || !empty($ccpu) || !empty($cextraip) ){
+          
+          $resource_errors = "";
+          $error_divider = " ";
+          
+          if ( !empty($cmem) ){
+            
+            /**
+             * For unknown reasons, the Solus API wants a "|" divider between 
+             * real memory and burstable memory here, when it wants ":" during create!
+             */
+            $cmem = str_replace(":", "|", $cmem);
 
-        if ( $solusvm->result["status"] == "success" ) {
-            $result = "success";
-        } else {
-            $result = (string) $solusvm->result["statusmsg"];
+            $solusvm->apiCall( 'vserver-change-memory', array( "memory" => $cmem, "vserverid" => $customField["vserverid"] ) );
+
+            if ( $solusvm->result["status"] != "success" ) {
+                $resource_errors = (string) $solusvm->result["statusmsg"] . $error_divider;
+            }
+            
+          }
+          
+          if ( !empty($cdisk) ){
+
+            $solusvm->apiCall( 'vserver-change-hdd', array( "hdd" => $cdisk, "vserverid" => $customField["vserverid"] ) );
+
+            if ( $solusvm->result["status"] != "success" ) {
+                $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
+            }
+            
+          }
+          
+          if ( !empty($ccpu) ){
+
+            $solusvm->apiCall( 'vserver-change-cpu', array( "cpu" => $ccpu, "vserverid" => $customField["vserverid"] ) );
+
+            if ( $solusvm->result["status"] != "success" ) {
+                $resource_errors .= (string) $solusvm->result["statusmsg"];
+            }
+            
+          }
+          
+          if ( !empty($cextraip) && $cextraip > 1 ){
+            
+            $ipaddresses = Capsule::table('tblhosting')->select('assignedips')->where( 'id', '=', $params['serviceid'] )->first();
+            
+            $lines_arr = preg_split('/\n|\r/',$ipaddresses);
+            $num_current_ips = count($lines_arr);
+            
+            $additional_ips_needed = $cextraip - $num_current_ips;
+            
+            //Safety in numbers?
+            if ( $additional_ips_needed > 0 && $additional_ips_needed < 20 ){
+              
+              while ($additional_ips_needed){
+                
+                $solusvm->apiCall( 'vserver-addip', array( "vserverid" => $customField["vserverid"] ) );
+
+                if ( $solusvm->result["status"] != "success" ) {
+                    $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
+                    break;
+                }
+                else{
+                    $ipaddresses .= "\n" . $solusvm->result["ipaddress"];
+                }
+                
+                $additional_ips_needed--;
+                
+              }
+              
+              Capsule::table('tblhosting')->where( 'id', $params['serviceid'] )->update(['assignedips' => $ipaddresses]);
+              
+            }
+            
+          }
+          
+          $result = empty( $resource_errors )? "success" : $resource_errors;
+                    
+        }
+        else{ // apply full plan change
+          
+          ## The call string for the connection fuction
+          $callArray = array(
+              "plan"            => $params["configoption4"],
+              "type"            => $solusvm->getVT(),
+              "vserverid"       => $customField["vserverid"]
+          );
+
+          $solusvm->apiCall( 'vserver-change', $callArray );
+
+          if ( $solusvm->result["status"] == "success" ) {
+              $result = "success";
+          } else {
+              $result = (string) $solusvm->result["statusmsg"];
+          }
+          
         }
 
         if ( $result == "success" ) {
@@ -673,6 +767,7 @@ function solusvmpro_ChangePackage( $params ) {
         }
 
         return $result;
+        
     } catch ( Exception $e ) {
         // Record the error in WHMCS's module log.
         logModuleCall(
