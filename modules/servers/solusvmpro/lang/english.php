@@ -5,8 +5,10 @@ if ( ! defined( "WHMCS" ) ) {
 }
 
 $_LANG['solusvmpro_reboot']                  = 'Reboot';
+$_LANG['solusvmpro_rebootconfirm']           = 'Are you sure you wish to restart this server?';
 $_LANG['solusvmpro_boot']                    = 'Boot';
 $_LANG['solusvmpro_shutdown']                = 'Shutdown';
+$_LANG['solusvmpro_shutdownconfirm']         = 'Are you sure you wish to power off this server?';
 $_LANG['solusvmpro_serialConsole']           = 'Serial Console';
 $_LANG['solusvmpro_html5Console']            = 'HTML 5 Serial Console';
 $_LANG['solusvmpro_vnc']                     = 'VNC';
