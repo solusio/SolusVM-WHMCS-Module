@@ -29,22 +29,6 @@
         }
     
     </style>
-    <script>
-        jQuery(document).ready(function(){
-          
-          jQuery('#solusvm_reboot_button').click(function(){
-            if (confirm('{/literal}{$LANG.rebootconfirm}{literal}')) {
-              window.location='clientarea.php?action=productdetails&id={/literal}{$serviceid}{literal}&serveraction=custom&a=reboot';
-            }
-          });
-          jQuery('#solusvm_shutdown_button').click(function(){
-            if (confirm('{/literal}{$LANG.shutdownconfirm}{literal}')) {
-              window.location='clientarea.php?action=productdetails&id={/literal}{$serviceid}{literal}&serveraction=custom&a=shutdown';
-            }
-          });
-          
-        });
-    </script>
 {/literal}
     <table width="100%" cellspacing="0" cellpadding="0" class="frame">
         <tr>
@@ -53,10 +37,12 @@
                     <tr>
                         <td colspan="2" class="vmbuttons">
                             {if $data['displayreboot'] }
-                                <input type="button" id="solusvm_reboot_button" style="width: 135px" value="{$LANG.reboot}">
+                                <input type="button" style="width: 135px" value="{$LANG.reboot}"
+                                       onClick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=reboot'">
                             {/if}
                             {if $data['displayshutdown'] }
-                                <input type="button" id="solusvm_shutdown_button" style="width: 135px" value="{$LANG.shutdown}">
+                                <input type="button" style="width: 135px" value="{$LANG.shutdown}"
+                                       onClick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=shutdown'">
                             {/if}
                             {if $data['displayboot'] }
                                 <input type="button" style="width: 135px" value="{$LANG.boot}"
