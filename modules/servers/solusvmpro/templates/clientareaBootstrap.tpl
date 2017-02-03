@@ -52,6 +52,21 @@
                 });
             }
         });
+        
+        jQuery(document).ready(function(){
+          
+          jQuery('#solusvm_reboot_button').click(function(){
+            if (confirm('{/literal}{$LANG.solusvmpro_rebootconfirm}{literal}')) {
+              window.location='clientarea.php?action=productdetails&id={/literal}{$serviceid}{literal}&serveraction=custom&a=reboot';
+            }
+          });
+          jQuery('#solusvm_shutdown_button').click(function(){
+            if (confirm('{/literal}{$LANG.solusvmpro_shutdownconfirm}{literal}')) {
+              window.location='clientarea.php?action=productdetails&id={/literal}{$serviceid}{literal}&serveraction=custom&a=shutdown';
+            }
+          });
+          
+        });
 
     </script>
 {/literal}
@@ -141,16 +156,10 @@
             </div>
             <div class="col-md-12 margin-5-button">
                 <span id="displayreboot" style="display: none">
-                    <button class="btn btn-default"
-                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=reboot'">
-                        {$LANG.solusvmpro_reboot}
-                    </button>
+                    <button class="btn btn-default" id="solusvm_reboot_button">{$LANG.solusvmpro_reboot}</button>
                 </span>
                 <span id="displayshutdown" style="display: none">
-                    <button class="btn btn-default"
-                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=shutdown'">
-                        {$LANG.solusvmpro_shutdown}
-                    </button>
+                    <button class="btn btn-default" id="solusvm_shutdown_button">{$LANG.solusvmpro_shutdown}</button>
                 </span>
                 <span id="displayboot" style="display: none">
                     <button class="btn btn-default"
