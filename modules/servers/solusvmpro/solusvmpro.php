@@ -136,6 +136,8 @@ function solusvmpro_ConfigOptions() {
 
 function solusvmpro_CreateAccount( $params ) {
     try {
+        global $_LANG;
+
         $solusvm = new SolusVM( $params );
 
         $serviceid      = $solusvm->getParam( "serviceid" ); # Unique ID of the product/service in the WHMCS Database
@@ -149,7 +151,10 @@ function solusvmpro_CreateAccount( $params ) {
         $customField = $solusvm->getParam( "customfields" ); # Array of custom field values for the product
 
         if ( function_exists( 'solusvmpro_create_one' ) ) {
-            solusvmpro_create_one( $params );
+            $res = solusvmpro_create_one( $params );
+            if( $res['cancel_process'] === true ){
+                return $_LANG['solusvmpro_cancel_custom_create_process'];
+            }
         }
 
         $newDataPassword = $solusvm->getNewDataPassword();
@@ -356,9 +361,14 @@ function solusvmpro_CreateAccount( $params ) {
 }
 
 function solusvmpro_SuspendAccount( $params ) {
+    global $_LANG;
+
     try {
         if ( function_exists( 'solusvmpro_suspend_pre' ) ) {
-            solusvmpro_suspend_pre( $params );
+            $res = solusvmpro_suspend_pre( $params );
+            if( $res['cancel_process'] === true ){
+                return $_LANG['solusvmpro_cancel_custom_suspend_process'];
+            }
         }
 
         $solusvm = new SolusVM( $params );
@@ -402,9 +412,13 @@ function solusvmpro_SuspendAccount( $params ) {
 }
 
 function solusvmpro_UnsuspendAccount( $params ) {
+    global $_LANG;
     try {
         if ( function_exists( 'solusvmpro_unsuspend_pre' ) ) {
-            solusvmpro_unsuspend_pre( $params );
+            $res = solusvmpro_unsuspend_pre( $params );
+            if( $res['cancel_process'] === true ){
+                return $_LANG['solusvmpro_cancel_custom_unsuspend_process'];
+            }
         }
 
         $solusvm = new SolusVM( $params );
@@ -449,9 +463,15 @@ function solusvmpro_UnsuspendAccount( $params ) {
 }
 
 function solusvmpro_TerminateAccount( $params ) {
+    global $_LANG;
+
     try {
+
         if ( function_exists( 'solusvmpro_terminate_pre' ) ) {
-            solusvmpro_terminate_pre( $params );
+            $res = solusvmpro_terminate_pre( $params );
+            if( $res['cancel_process'] === true ){
+                return $_LANG['solusvmpro_cancel_custom_terminate_process'];
+            }
         }
 
         $solusvm = new SolusVM( $params );
@@ -639,9 +659,14 @@ function solusvmpro_shutdown( $params ) {
 ################################################################################
 
 function solusvmpro_ChangePackage( $params ) {
+    global $_LANG;
+
     try {
         if ( function_exists( 'solusvmpro_changepackage_pre' ) ) {
-            solusvmpro_changepackage_pre( $params );
+            $res = solusvmpro_changepackage_pre( $params );
+            if( $res['cancel_process'] === true ){
+                return $_LANG['solusvmpro_cancel_custom_package_change_process'];
+            }
         }
 
         $solusvm     = new SolusVM( $params );
