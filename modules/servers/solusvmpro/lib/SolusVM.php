@@ -24,6 +24,8 @@ class SolusVM {
     protected $configOptionUsernamePrefix;
     protected $serviceid;
     protected $pid;
+    public $cpHostname;
+
 
     public function __construct( $params, $debug = false ) {
 
@@ -51,6 +53,7 @@ class SolusVM {
 
         ## Grab the variables we need from the database to connect to the correct master
         $row = Capsule::table( 'tblservers' )->where( 'id', $this->masterID )->first();
+        $this->cpHostname = $row->hostname;
 
         $this->idkey   = decrypt( $row->password );
         $this->extData = $this->serverExtra( array( 'master' => $this->masterID ) );

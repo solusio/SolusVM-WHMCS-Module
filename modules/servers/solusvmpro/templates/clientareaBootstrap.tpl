@@ -141,16 +141,10 @@
             </div>
             <div class="col-md-12 margin-5-button">
                 <span id="displayreboot" style="display: none">
-                    <button class="btn btn-default"
-                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=reboot'">
-                        {$LANG.solusvmpro_reboot}
-                    </button>
+                    <a data-toggle="modal" class="btn btn-default" href="#" data-target="#confirm-reboot" role="button">{$LANG.solusvmpro_reboot}</a>
                 </span>
                 <span id="displayshutdown" style="display: none">
-                    <button class="btn btn-default"
-                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=shutdown'">
-                        {$LANG.solusvmpro_shutdown}
-                    </button>
+                    <a data-toggle="modal" class="btn btn-default" href="#" data-target="#confirm-shutdown" role="button">{$LANG.solusvmpro_shutdown}</a>
                 </span>
                 <span id="displayboot" style="display: none">
                     <button class="btn btn-default"
@@ -355,5 +349,44 @@
         <div class="col-md-9 margin-top-20" id="ipcsv">
         </div>
     </div>
+
+    <div class="modal fade" id="confirm-reboot" tabindex="-1" role="dialog" aria-labelledby="rebootModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{$LANG.solusvmpro_reboot_confirm_label}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{$LANG.solusvmpro_reboot_confirm}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{$LANG.solusvmpro_cancel}</button>
+                    <input type="button" class="btn btn-warning" value="{$LANG.solusvmpro_reboot}"
+                           onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=reboot'">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirm-shutdown" tabindex="-1" role="dialog" aria-labelledby="shutdownModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">{$LANG.solusvmpro_shutdown_confirm_label}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{$LANG.solusvmpro_shutdown_confirm}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{$LANG.solusvmpro_cancel}</button>
+                    <input type="button" class="btn btn-warning" value="{$LANG.solusvmpro_shutdown}"
+                           onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=shutdown'">
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>

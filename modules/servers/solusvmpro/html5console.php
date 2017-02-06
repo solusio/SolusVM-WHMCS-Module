@@ -111,11 +111,12 @@ if ($r["status"] == "success") {
             exit();
         }
 
-        if(trim($r['consoledomain']) !=='' ){
+        /*if(trim($r['consoledomain']) !=='' ){
             $host_connect = $r['consoledomain'];
         } else {
             $host_connect = $r['consoleip'];
-        }
+        }*/
+        $host_connect = $solusvm->cpHostname;
 
         ?>
 
