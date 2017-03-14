@@ -15,12 +15,12 @@ SolusVM::loadLang();
 
     <head>
         <!-- Bootstrap -->
-        <link href="../../../assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../../../assets/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Styling -->
-        <link href="../../../templates/six/css/overrides.css" rel="stylesheet">
-        <link href="../../../templates/six/css/styles.css" rel="stylesheet">
+        <link href="/templates/six/css/overrides.css" rel="stylesheet">
+        <link href="/templates/six/css/styles.css" rel="stylesheet">
 
         <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,300' rel='stylesheet' type='text/css'>
         <title><?php echo $_LANG['solusvmpro_html5Console']; ?></title>
@@ -44,7 +44,7 @@ SolusVM::loadLang();
             }
         </style>
 
-        <script src="../../../assets/js/jquery.min.js"></script>
+        <script src="/assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="term/term.js"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 

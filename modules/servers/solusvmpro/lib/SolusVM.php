@@ -769,9 +769,16 @@ class SolusVM {
 
         if ( $this->getExtData( "graphs" ) != "disable" ) {
             $url = $this->apiCall( "fwdurl" );
+
             if ( isset( $result["trafficgraph"] ) ) {
                 $cparams["displaytrafficgraph"] = 1;
                 $cparams["trafficgraphurl"]     = $url . $result['trafficgraph'];
+
+                if ( $result["type"] == "kvm" || $result["type"] == "xen"){
+                    $cparams["displayhddgraph"] = 1;
+                    $result['hddgraph'] = str_replace("bandwidth", "io", $result['trafficgraph']);
+                    $cparams["hddgraphurl"]     = $url . $result['hddgraph'];
+                }
             }
             if ( isset( $result["loadgraph"] ) ) {
                 $cparams["displayloadgraph"] = 1;
@@ -783,7 +790,6 @@ class SolusVM {
             }
             $cparams["displaygraphs"] = 1;
         }
-
 
         return $cparams;
     }

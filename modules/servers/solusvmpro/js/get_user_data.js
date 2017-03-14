@@ -78,9 +78,20 @@ $(function () {
             });
 
             if (data.displaytrafficgraph == 1) {
+                $('#trafficgraph').show();
                 $('#trafficgraphurlImg').attr('src', data.trafficgraphurl);
+            }
+            if (data.displayloadgraph == 1) {
+                $('#loadgraph').show();
                 $('#loadgraphurlImg').attr('src', data.loadgraphurl);
+            }
+            if (data.displaymemorygraph == 1) {
+                $('#memorygraph').show();
                 $('#memorygraphurlImg').attr('src', data.memorygraphurl);
+            }
+            if (data.displayhddgraph == 1) {
+                $('#hddgraph').show();
+                $('#hddgraphurlImg').attr('src', data.hddgraphurl);
             }
 
         }).fail(function (jqXHR, textStatus) {

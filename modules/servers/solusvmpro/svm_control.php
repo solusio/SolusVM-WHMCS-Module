@@ -71,6 +71,15 @@ if ( $r["status"] == "success" ) {
                     <img src="' . $cparams["trafficgraphurl"] . '" alt="Traffic Graph Unavailable">
                 </div>
             ';
+            if ( $r["type"] == "kvm" || $r["type"] == "xen"){
+
+                $cparams['hddgraphurl'] = str_replace("bandwidth", "io", $cparams['trafficgraphurl']);
+                $graphs .= '
+                <div class="col-md-12 margin-top-20">
+                    <img src="' . $cparams['hddgraphurl'] . '" alt="HDD Graph Unavailable">
+                </div>
+            ';
+            }
         }
         if ( $cparams["displayloadgraph"] == 1 ) {
             $graphs .= '

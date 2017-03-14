@@ -41,4 +41,5 @@ $solusvm->apiCall( 'vserver-infoall', $callArray );
 $r = $solusvm->result;
 
 $cparams = $solusvm->clientAreaCalculations( $r );
+
 echo json_encode( $cparams );

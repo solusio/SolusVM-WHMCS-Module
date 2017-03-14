@@ -313,16 +313,20 @@
                         <div id="solusvmpro_collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
                             <div class="panel-body">
 
-                                <div class="col-md-12 margin-top-20">
+                                <div class="col-md-12 margin-top-20" id="trafficgraph" style="display: none">
                                     <img id="trafficgraphurlImg" alt="Traffic Graph Unavailable">
                                 </div>
 
-                                <div class="col-md-12 margin-top-20">
+                                <div class="col-md-12 margin-top-20" id="loadgraph" style="display: none">
                                     <img id="loadgraphurlImg" alt="Load Graph Unavailable">
                                 </div>
 
-                                <div class="col-md-12 margin-top-20">
+                                <div class="col-md-12 margin-top-20" id="memorygraph" style="display: none">
                                     <img id="memorygraphurlImg" alt="Memory Graph Unavailable">
+                                </div>
+
+                                <div class="col-md-12 margin-top-20" id="hddgraph" style="display: none">
+                                    <img id="hddgraphurlImg" alt="Hdd Graph Unavailable">
                                 </div>
 
                             </div>
