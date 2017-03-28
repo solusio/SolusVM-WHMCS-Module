@@ -13,16 +13,18 @@ $admin_user = "admin";
 /**
  * @var $security_hash
  * The hash as shown in SolusVM.
+ * You can specify more than one master
  */
 
-$security_hash = "xxx";
+$security_hash = "xxx, xxx, xxx";
 
 /**
  * @var $connection_ip
  * The ip address of your SolusVM master.
+ * You can specify more than one master
  */
 
-$connection_ip = "xxx";
+$connection_ip = "xxx, xxx, xxx";
 
 
 /**
@@ -45,12 +47,17 @@ if ( $extra ) {
 
 $remote_addr = isset( $_SERVER["REMOTE_ADDR"] ) ? $_SERVER["REMOTE_ADDR"] : "";
 
+$connection_ip_array = explode(',', $connection_ip);
+$security_hash_array = explode(',', $security_hash);
 
-if ( $remote_addr != $connection_ip ) {
+$connection_ip_ar_clear = array_map('trim', $connection_ip_array);
+$security_hash_ar_clear = array_map('trim', $security_hash_array);
+
+if (!in_array($remote_addr, $connection_ip_ar_clear)) {
     echo "invalid ip";
     exit();
 }
-if ( $hash != $security_hash ) {
+if (!in_array($hash, $security_hash_ar_clear)) {
     echo "invalid hash";
     exit();
 }
@@ -193,6 +200,33 @@ switch ( $action ) {
                        'assignedips' => $ips,
                    ]
                );
+
+        echo "<success>1</success>";
+
+        break;
+
+    case "changerootpassword":
+
+        /**
+         * Change root password
+         */
+
+        $rootValueID = Capsule::table('tblcustomfields')
+            ->join('tblcustomfieldsvalues', 'tblcustomfieldsvalues.fieldid', '=', 'tblcustomfields.id')
+            ->select('tblcustomfieldsvalues.fieldid as rootID')
+            ->where('tblcustomfields.type', 'product')
+            ->where('tblcustomfieldsvalues.relid', $product->value_productid)
+            ->where('tblcustomfields.fieldname', 'rootpassword')
+            ->first();
+
+        Capsule::table('tblcustomfieldsvalues')
+            ->where('relid', $hosting_id)
+            ->where('fieldid', $rootValueID->rootID)
+            ->update(
+                [
+                    'value' => $extra_var['newrootpassword'],
+                ]
+            );
 
         echo "<success>1</success>";
 
