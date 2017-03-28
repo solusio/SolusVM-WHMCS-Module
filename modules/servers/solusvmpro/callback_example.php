@@ -69,10 +69,13 @@ if ( ! is_numeric( $vserverid ) ) {
 
 $product = Capsule::table( 'tblcustomfields' )
                   ->join( 'tblcustomfieldsvalues', 'tblcustomfieldsvalues.fieldid', '=', 'tblcustomfields.id' )
+                  ->join( 'tblhosting', 'tblcustomfieldsvalues.relid', '=', 'tblhosting.id' )
+                  ->join( 'tblservers', 'tblhosting.server', '=', 'tblservers.id' )
                   ->select( 'tblcustomfields.id AS field_id', 'tblcustomfields.type AS field_type,', 'tblcustomfields.fieldname AS field_name', 'tblcustomfieldsvalues.fieldid AS value_id', 'tblcustomfieldsvalues.value AS value_value', 'tblcustomfieldsvalues.relid AS value_productid' )
                   ->where( 'tblcustomfields.type', 'product' )
                   ->where( 'tblcustomfields.fieldname', 'vserverid' )
                   ->where( 'tblcustomfieldsvalues.value', $vserverid )
+                  ->where( 'tblservers.ipaddress', $remote_addr )
                   ->first();
 
 if ( ! $product ) {
