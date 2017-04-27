@@ -4,6 +4,7 @@ if ( ! defined( "WHMCS" ) ) {
     die( "This file cannot be accessed directly" );
 }
 
+
 $_LANG['solusvmpro_reboot']                               = 'Reboot';
 $_LANG['solusvmpro_boot']                                 = 'Boot';
 $_LANG['solusvmpro_shutdown']                             = 'Shutdown';
