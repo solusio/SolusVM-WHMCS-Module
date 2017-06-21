@@ -4,7 +4,6 @@ if ( ! defined( "WHMCS" ) ) {
     die( "This file cannot be accessed directly" );
 }
 
-
 $_LANG['solusvmpro_reboot']                               = 'Reboot';
 $_LANG['solusvmpro_boot']                                 = 'Boot';
 $_LANG['solusvmpro_shutdown']                             = 'Shutdown';
@@ -94,3 +93,5 @@ $_LANG['solusvmpro_shutdown_confirm_label']               = 'Confirm Shutdown';
 $_LANG['solusvmpro_cancel']                               = 'Cancel';
 $_LANG['solusvmpro_shutdown_confirm']                     = 'Are you sure you wish to power off this server?';
 $_LANG['solusvmpro_reboot_confirm']                       = 'Are you sure you wish to restart this server?';
+$_LANG['solusvmpro_tuntap_enable']                        = 'Enable TUN/TAP';
+$_LANG['solusvmpro_tuntap_disable']                       = 'Disable TUN/TAP';

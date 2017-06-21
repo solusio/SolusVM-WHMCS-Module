@@ -47,7 +47,7 @@ $(function () {
                 $("#controlpanellink").attr("onclick", "window.open('" + data.controlpanellink + "','_blank')");
             }
 
-            var optionsIds = ["displayreboot", "displayshutdown", "displayboot", "displayconsole", "displayhtml5console", "displayvnc", "displayrootpassword", "displayhostname", "displayvncpassword", "displaypanelbutton", "displayclientkeyauth"];
+            var optionsIds = ["displayreboot", "displayshutdown", "displayboot", "displayconsole", "displayhtml5console", "displayvnc", "displayrootpassword", "displayhostname", "displayvncpassword", "displaypanelbutton", "displayclientkeyauth", "displaytunenable", "displaytundisable"];
             var showOptions = false;
             optionsIds.forEach(function (v) {
                 if (data.hasOwnProperty(v)) {
