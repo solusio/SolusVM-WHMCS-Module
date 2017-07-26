@@ -2,7 +2,7 @@
 
 namespace SolusVM;
 
-use Curl\Curl;
+use SolusVM\Curl;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 
@@ -829,7 +829,7 @@ class SolusVM {
                 $master_url = $this->apiCall( 'fwdurl', $callArray );
 
                 header( "Location: " . $master_url . "/auth.php?_a=" . $slogin["hasha"] . "&_b=" . $slogin["hashb"] );
-
+                exit();
             } else {
                 $cparams["clientkeyautherror"] = 1;
             }
