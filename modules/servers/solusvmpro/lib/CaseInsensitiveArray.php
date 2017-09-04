@@ -1,6 +1,6 @@
 <?php
 
-namespace Curl;
+namespace SolusVM;
 
 class CaseInsensitiveArray implements \ArrayAccess, \Countable, \Iterator
 {
