@@ -1,26 +1,38 @@
 <?php
 
-define("CLIENTAREA", true);
+use WHMCS\ClientArea;
+use WHMCS\Database\Capsule;
+
+use SolusVM\SolusVM;
+
+define('CLIENTAREA', true);
+
 require("../../../init.php");
+
+$results = localAPI( 'GetConfigurationValue', array('setting' => 'SystemURL') );
+$systemurl = $results['value'];
+
+$ca = new ClientArea();
+
+$ca->initPage();
+$ca->requireLogin();
 
 require_once __DIR__ . '/lib/Curl.php';
 require_once __DIR__ . '/lib/CaseInsensitiveArray.php';
 require_once __DIR__ . '/lib/SolusVM.php';
 
-use Illuminate\Database\Capsule\Manager as Capsule;
-use SolusVM\SolusVM;
 
 SolusVM::loadLang();
 ?>
 
     <head>
         <!-- Bootstrap -->
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
+        <link href="<?php echo $systemurl; ?>assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<?php echo $systemurl; ?>assets/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Styling -->
-        <link href="/templates/six/css/overrides.css" rel="stylesheet">
-        <link href="/templates/six/css/styles.css" rel="stylesheet">
+        <link href="<?php echo $systemurl; ?>templates/six/css/overrides.css" rel="stylesheet">
+        <link href="<?php echo $systemurl; ?>templates/six/css/styles.css" rel="stylesheet">
 
         <link href='//fonts.googleapis.com/css?family=Source+Code+Pro:400,300' rel='stylesheet' type='text/css'>
         <title><?php echo $_LANG['solusvmpro_html5Console']; ?></title>
@@ -44,7 +56,7 @@ SolusVM::loadLang();
             }
         </style>
 
-        <script src="/assets/js/jquery.min.js"></script>
+        <script src="<?php echo $systemurl; ?>assets/js/jquery.min.js"></script>
         <script type="text/javascript" src="term/term.js"></script>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
