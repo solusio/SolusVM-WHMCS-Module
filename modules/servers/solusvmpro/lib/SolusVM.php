@@ -469,6 +469,23 @@ class SolusVM {
         return $cextraip;
     }
 
+    public function getCnspeed() {
+        if ( $this->getExtData( "custom-config-nspeed" ) ) {
+            $custom_config_nspeed = $this->getExtData( "custom-config-nspeed" );
+        } else {
+            $custom_config_nspeed = "Network Speed";
+        }
+
+        if ( ! isset( $this->configOption[ $custom_config_nspeed ] ) ) {
+            $cextraspeed = "";
+        } else {
+            $extraspeedsplit = explode( "|", $this->configOption[ $custom_config_nspeed ] );
+            $cextraspeed     = $extraspeedsplit[0];
+        }
+
+        return $cextraspeed;
+    }
+
     public function getHostname() {
         ## Sort the hostname
         $domain = $this->getParam( 'domain' );
