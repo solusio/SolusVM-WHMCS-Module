@@ -171,7 +171,7 @@ if ($r["status"] == "success") {
             </div>
         </div>
         <div id="term-container"
-             style="margin: auto;background-color: #454545;border: 10px solid #454545;width: 800px;height: 500px;font-family: 'Source Code Pro', monospace;overflow: hidden;">
+             style="margin: auto;background-color: #454545;border: 10px solid #454545;width: 800px;font-family: 'Source Code Pro', monospace;overflow: hidden;">
             <div id="term">
             </div>
         </div>
