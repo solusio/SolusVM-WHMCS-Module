@@ -14,8 +14,6 @@ class SolusVM {
     protected $idkey;
     protected $extData;
     protected $masterID;
-    public $result = '';
-    public $rawResult = '';
     protected $params = array();
     protected $configOption;
     protected $configOptionVirtualizationType;
@@ -24,6 +22,9 @@ class SolusVM {
     protected $configOptionUsernamePrefix;
     protected $serviceid;
     protected $pid;
+    protected $configIni;
+    public $result = '';
+    public $rawResult = '';
     public $cpHostname;
 
 
@@ -100,6 +101,10 @@ class SolusVM {
         $this->serviceid = $this->getParam( "serviceid" ); # Unique ID of the product/service in the WHMCS Database
         $this->pid       = $this->getParam( "pid" ); # Product/Service ID
 
+        //Parse Ini file
+        $config_file  = dirname(__DIR__) . '/configure.ini';
+        $this->configIni = parse_ini_file( $config_file );
+
     }
 
     public function getParam( $name ) {
@@ -123,7 +128,7 @@ class SolusVM {
 
         if ( $faction == "fwdurl" ) {
             $result = $this->fwdurl;
-            logModuleCall( 'solusvmpro', $faction, '', $result, '', array() );
+            $this->debugLog( 'solusvmpro', $faction, '', $result, '', array() );
 
             return $result;
         }
@@ -169,7 +174,7 @@ class SolusVM {
         }
         $curl->close();
 
-        logModuleCall( 'solusvmpro', $faction, $postfields, $result, $error, array( $postfields["id"], $postfields["key"] ) );
+        $this->debugLog( 'solusvmpro', $faction, $postfields, $result, $error, array( $postfields["id"], $postfields["key"] ) );
 
         $this->rawResult = $result;
         $this->result    = $this->sortReturn( $result );
@@ -184,7 +189,7 @@ class SolusVM {
         foreach ( $matches[1] as $k => $v ) {
             $result[ $v ] = $matches[2][ $k ];
         }
-        logModuleCall( 'solusvmpro', 'process', $data, $result, $result, '' );
+        $this->debugLog( 'solusvmpro', 'process', $data, $result, $result, '' );
 
         return $result;
     }
@@ -588,136 +593,148 @@ class SolusVM {
     public function clientAreaCalculations( $result ) {
         global $_LANG;
 
-        $cparams = array();
+            $cparams = array(
+                "displaymemorybar"     => 0,
+                "displayhddbar"        => 0,
+                "displaybandwidthbar"  => 0,
+                "displaygraphs"        => 0,
+                "displayips"           => 0,
+                "displayhtml5console"  => 0,
+                "displayconsole"       => 0,
+                "displayvnc"           => 0,
+                "displayvncpassword"   => 0,
+                "displaypanelbutton"   => 0,
+                "displayrootpassword"  => 0,
+                "displayhostname"      => 0,
+                "displayreboot"        => 0,
+                "displayshutdown"      => 0,
+                "displayboot"          => 0,
+                "displayclientkeyauth" => 0,
+                "clientkeyautherror"   => 0,
+                "displaytrafficgraph"  => 0,
+                "displayloadgraph"     => 0,
+                "displaymemorygraph"   => 0,
+            );
 
-        $cparams["displaymemorybar"]     = 0;
-        $cparams["displayhddbar"]        = 0;
-        $cparams["displaybandwidthbar"]  = 0;
-        $cparams["displaygraphs"]        = 0;
-        $cparams["displayips"]           = 0;
-        $cparams["displayhtml5console"]  = 0;
-        $cparams["displayconsole"]       = 0;
-        $cparams["displayvnc"]           = 0;
-        $cparams["displayvncpassword"]   = 0;
-        $cparams["displaypanelbutton"]   = 0;
-        $cparams["displayrootpassword"]  = 0;
-        $cparams["displayhostname"]      = 0;
-        $cparams["displayreboot"]        = 0;
-        $cparams["displayshutdown"]      = 0;
-        $cparams["displayboot"]          = 0;
-        $cparams["displayclientkeyauth"] = 0;
-        $cparams["clientkeyautherror"]   = 0;
-        $cparams["displaytrafficgraph"]  = 0;
-        $cparams["displayloadgraph"]     = 0;
-        $cparams["displaymemorygraph"]   = 0;
-        $cparams["displaygraphs"]        = 0;
 
-        $vstatus = "";
-        if ( $result["status"] == "success" ) {
-            if ( $result["state"] == "online" ) {
-                $vstatus = '<span style="color: #0C0"><strong>' . $_LANG['solusvmpro_online'] . '</strong></span>';
-            } elseif ( $result["state"] == "offline" ) {
-                $vstatus = '<span style="color: #F00"><strong>' . $_LANG['solusvmpro_offline'] . '</strong></span>';
-            } elseif ( $result["state"] == "disabled" ) {
-                $vstatus = '<span style="color: #000"><strong>' . $_LANG['solusvmpro_suspended'] . '</strong></span>';
+            $vstatusAr = array(
+                'online'  => array(
+                    'msg'   => $_LANG['solusvmpro_online'],
+                    'color' => ( isset($this->configIni['statusOnlineColor'] ) ? $this->configIni['statusOnlineColor'] : '0C0')
+                ),
+                'offline' => array(
+                    'msg'   => $_LANG['solusvmpro_offline'],
+                    'color' => ( isset($this->configIni['statusOfflineColor'] ) ? $this->configIni['statusOfflineColor'] : 'F00')
+                ),
+                'disabled' => array(
+                    'msg'   => $_LANG['solusvmpro_suspended'],
+                    'color' => ( isset($this->configIni['statusDisabledColor'] ) ? $this->configIni['statusDisabledColor'] : '000')
+                ),
+                'unavailable' => array(
+                    'msg'   => $_LANG['solusvmpro_unavailable'],
+                    'color' => ( isset($this->configIni['statusUnavailableColor'] ) ? $this->configIni['statusUnavailableColor'] : '000')
+                )
+            );
+
+            if ( $result["status"] == "success" ) {
+                $vstatus = '<span style="color: #'.$vstatusAr[$result["state"]]['color'].'"><strong>' . $vstatusAr[$result["state"]]['msg'] . '</strong></span>';
+            } else {
+                $vstatus = '<span style="color: #'.$vstatusAr['unavailable']['color'].'"><strong>' . $vstatusAr['unavailable']['msg'] . '</strong></span>';
             }
-        } else {
-            $vstatus = '<span style="color: #000"><strong>' . $_LANG['solusvmpro_unavailable'] . '</strong></span>';
-        }
-        $cparams["displaystatus"] = $vstatus;
 
-        $cparams["node"] = $result["node"];
+            $cparams["displaystatus"] = $vstatus;
+            $cparams["node"] = $result["node"];
 
-        if ( $result["state"] == "online" || $result["state"] == "offline" ) {
-            $bandwidthData    = explode( ",", $result["bandwidth"] );
-            $usedBwPercentage = $bandwidthData[3];
-            $bandwidthData[1] = $bandwidthData[1] / 1024;
-            $bandwidthData[2] = $bandwidthData[2] / 1024;
-            $bandwidthData[0] = $bandwidthData[0] / 1024;
-            $bwUsed           = $this->bwFormat( $bandwidthData[1] );
-            $bwFree           = $this->bwFormat( $bandwidthData[2] );
-            $bwTotal          = $this->bwFormat( $bandwidthData[0] );
+            if ($result["state"] == "online" || $result["state"] == "offline") {
+                //Bandwidth graph
+                $bandwidthData    = explode(",", $result["bandwidth"]);
+                $usedBwPercentage = $bandwidthData[3];
+                $bandwidthData[1] = $bandwidthData[1] / 1024;
+                $bandwidthData[2] = $bandwidthData[2] / 1024;
+                $bandwidthData[0] = $bandwidthData[0] / 1024;
+                $bwUsed           = $this->bwFormat($bandwidthData[1]);
+                $bwFree           = $this->bwFormat($bandwidthData[2]);
+                $bwTotal          = $this->bwFormat($bandwidthData[0]);
 
-            $color1 = '';
-            if ( $result["type"] == "openvz" ) {
-                if ( $this->getExtData( "memusage" ) != "disable" ) {
-                    $memData           = explode( ",", $result["memory"] );
-                    $usedMemPercentage = $memData[3];
-                    $memData[1]        = $memData[1] / 1024;
-                    $memData[2]        = $memData[2] / 1024;
-                    $memData[0]        = $memData[0] / 1024;
-                    $memUsed           = $this->bwFormat( $memData[1] );
-                    $memFree           = $this->bwFormat( $memData[2] );
-                    $memTotal          = $this->bwFormat( $memData[0] );
+                $bwGraphColor = "#";
+                if ($usedBwPercentage < 75) {
+                    $bwGraphColor .= (isset($this->configIni['pbSuccessColor']) ? $this->configIni['pbSuccessColor'] : '36e22d');
+                } else if ($usedBwPercentage > 90) {
+                    $bwGraphColor .= (isset($this->configIni['pbDangerColor']) ? $this->configIni['pbDangerColor'] : 'f82812');
+                } else {
+                    $bwGraphColor .= (isset($this->configIni['pbWarningColor']) ? $this->configIni['pbWarningColor'] : 'f8aa12');
+                }
 
-                    if ( $usedMemPercentage < 75 ) {
-                        $color2 = "#36e22d";
-                    } else if ( $usedMemPercentage > 90 ) {
-                        $color2 = "#f82812";
-                    } else {
-                        $color2 = "#f8aa12";
-                    }
+                if ($this->getExtData("bwusage") != "disable") {
 
-                    $usedHddPercentage = '';
-                    $color3            = '';
-                    $hddUsed           = '';
-                    $hddTotal          = '';
-                    $hddFree           = '';
+                    $cparams["displaybandwidthbar"] = 1;
+                    $cparams["bandwidthpercent"]    = $usedBwPercentage;
+                    $cparams["bandwidthcolor"]      = $bwGraphColor;
+                    $cparams["bandwidthused"]       = $bwUsed;
+                    $cparams["bandwidthtotal"]      = $bwTotal;
+                    $cparams["bandwidthfree"]       = $bwFree;
+                }
 
-                    if ( $result["type"] == "openvz" || $result["type"] == "xen" ) {
-                        if ( $this->getExtData( "diskusage" ) != "disable" ) {
-                            $hddData           = explode( ",", $result["hdd"] );
-                            $usedHddPercentage = $hddData[3];
-                            $hddData[1]        = $hddData[1] / 1024;
-                            $hddData[2]        = $hddData[2] / 1024;
-                            $hddData[0]        = $hddData[0] / 1024;
-                            $hddUsed           = $this->bwFormat( $hddData[1] );
-                            $hddFree           = $this->bwFormat( $hddData[2] );
-                            $hddTotal          = $this->bwFormat( $hddData[0] );
-                            if ( $usedHddPercentage < 75 ) {
-                                $color3 = "#36e22d";
-                            } else if ( $usedHddPercentage > 90 ) {
-                                $color3 = "#f82812";
-                            } else {
-                                $color3 = "#f8aa12";
-                            }
+                //Memory graph
+                if ($result["type"] == "openvz") {
+                    if ($this->getExtData("memusage") != "disable") {
+                        $memData           = explode(",", $result["memory"]);
+                        $usedMemPercentage = $memData[3];
+                        $memData[1]        = $memData[1] / 1024;
+                        $memData[2]        = $memData[2] / 1024;
+                        $memData[0]        = $memData[0] / 1024;
+                        $memUsed           = $this->bwFormat($memData[1]);
+                        $memFree           = $this->bwFormat($memData[2]);
+                        $memTotal          = $this->bwFormat($memData[0]);
 
-                            if ( $usedBwPercentage < 75 ) {
-                                $color1 = "#36e22d";
-                            } else if ( $usedBwPercentage > 90 ) {
-                                $color1 = "#f82812";
-                            } else {
-                                $color1 = "#f8aa12";
-                            }
-
-                            $cparams["displaymemorybar"] = 1;
-                            $cparams["memorypercent"]    = $usedMemPercentage;
-                            $cparams["memorycolor"]      = $color2;
-                            $cparams["memoryused"]       = $memUsed;
-                            $cparams["memorytotal"]      = $memTotal;
-                            $cparams["memoryfree"]       = $memFree;
+                        $memGraphColor = "#";
+                        if ($usedMemPercentage < 75) {
+                            $memGraphColor .= (isset($this->configIni['pbSuccessColor']) ? $this->configIni['pbSuccessColor'] : '36e22d');
+                        } else if ($usedMemPercentage > 90) {
+                            $memGraphColor .= (isset($this->configIni['pbDangerColor']) ? $this->configIni['pbDangerColor'] : 'f82812');
+                        } else {
+                            $memGraphColor .= (isset($this->configIni['pbWarningColor']) ? $this->configIni['pbWarningColor'] : 'f8aa12');
                         }
-                    }
 
-                    $cparams["displayhddbar"] = 1;
-                    $cparams["hddpercent"]    = $usedHddPercentage;
-                    $cparams["hddcolor"]      = $color3;
-                    $cparams["hddused"]       = $hddUsed;
-                    $cparams["hddtotal"]      = $hddTotal;
-                    $cparams["hddfree"]       = $hddFree;
+                        $cparams["displaymemorybar"] = 1;
+                        $cparams["memorypercent"]    = $usedMemPercentage;
+                        $cparams["memorycolor"]      = $memGraphColor;
+                        $cparams["memoryused"]       = $memUsed;
+                        $cparams["memorytotal"]      = $memTotal;
+                        $cparams["memoryfree"]       = $memFree;
+                    }
+                }
+
+                //HDD graph
+                if ($result["type"] == "openvz" || $result["type"] == "xen") {
+                    if ($this->getExtData("diskusage") != "disable") {
+                        $hddData           = explode(",", $result["hdd"]);
+                        $usedHddPercentage = $hddData[3];
+                        $hddData[1]        = $hddData[1] / 1024;
+                        $hddData[2]        = $hddData[2] / 1024;
+                        $hddData[0]        = $hddData[0] / 1024;
+                        $hddUsed           = $this->bwFormat($hddData[1]);
+                        $hddFree           = $this->bwFormat($hddData[2]);
+                        $hddTotal          = $this->bwFormat($hddData[0]);
+
+                        $hddGraphColor = "#";
+                        if ($usedHddPercentage < 75) {
+                            $hddGraphColor .= (isset($this->configIni['pbSuccessColor']) ? $this->configIni['pbSuccessColor'] : '36e22d');
+                        } else if ($usedHddPercentage > 90) {
+                            $hddGraphColor .= (isset($this->configIni['pbDangerColor']) ? $this->configIni['pbDangerColor'] : 'f82812');
+                        } else {
+                            $hddGraphColor .= (isset($this->configIni['pbWarningColor']) ? $this->configIni['pbWarningColor'] : 'f8aa12');
+                        }
+
+                        $cparams["displayhddbar"] = 1;
+                        $cparams["hddpercent"]    = $usedHddPercentage;
+                        $cparams["hddcolor"]      = $hddGraphColor;
+                        $cparams["hddused"]       = $hddUsed;
+                        $cparams["hddtotal"]      = $hddTotal;
+                        $cparams["hddfree"]       = $hddFree;
+                    }
                 }
             }
-
-            if ( $this->getExtData( "bwusage" ) != "disable" ) {
-
-                $cparams["displaybandwidthbar"] = 1;
-                $cparams["bandwidthpercent"]    = $usedBwPercentage;
-                $cparams["bandwidthcolor"]      = $color1;
-                $cparams["bandwidthused"]       = $bwUsed;
-                $cparams["bandwidthtotal"]      = $bwTotal;
-                $cparams["bandwidthfree"]       = $bwFree;
-            }
-
 
             if ( $this->getExtData( "graphs" ) != "disable" ) {
                 $cparams["displaygraphs"] = 1;
@@ -782,7 +799,7 @@ class SolusVM {
                 $cparams["clientkeyauthreturnurl"] = $this->getExtData( "clientkeyauthreturnurl" );
             }
 
-        }
+
 
         if ( $this->getExtData( "graphs" ) != "disable" ) {
             $url = $this->apiCall( "fwdurl" );
@@ -1002,7 +1019,6 @@ class SolusVM {
                        ]
                    );
         }
-
     }
 
     public function getVT() {
@@ -1048,6 +1064,13 @@ class SolusVM {
             $language = 'english.php';
         }
         require_once( $langDir . $language );
+    }
+
+    public function debugLog( $module, $action, $requestString, $responseData, $processedData, $replaceVars ) {
+        if ( !$this->configIni[ 'debug' ] ){
+            return;
+        }
+        logModuleCall( $module, $action, $requestString, $responseData, $processedData, $replaceVars );
     }
 }
 
