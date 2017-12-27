@@ -25,13 +25,15 @@ echo '
     <body>';
 
 $ca = new WHMCS_ClientArea();
-if ( ! $ca->isLoggedIn() ) {
-    echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
-    exit();
+if (!$ca->isLoggedIn()) {
+    if ((!isset($_SESSION['adminid']) || ((int)$_SESSION['adminid'] <= 0))) {
+        echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_unauthorized'] . '</div></body>';
+        exit();
+    }
+    $uid = (int)$_GET['uid'];
+} else {
+    $uid = $ca->getUserID();
 }
-
-//$pagetitle = "Serial Console";
-//$ca->setPageTitle( $pagetitle );
 
 $servid = isset( $_GET['id'] ) ? (int) $_GET['id'] : "";
 
@@ -40,9 +42,8 @@ if ( $servid == "" ) {
     exit();
 }
 
-$uid = $ca->getUserID();
-
 $params = SolusVM::getParamsFromServiceID( $servid, $uid );
+
 if ( $params === false ) {
     echo '<div class="alert alert-danger">' . $_LANG['solusvmpro_vserverNotFound'] . '</div></body>';
     exit;
@@ -83,10 +84,10 @@ if ( $r["type"] != "xenhvm" && $r["type"] != "kvm" ) {
     exit();
 }
 if ( $r["sockethost"] ) {
-    $htmlvnc = '&nbsp;&nbsp;<input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_HTMLVNC'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&_vnc=html\'"/>';
+    $htmlvnc = '&nbsp;&nbsp;<input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_HTMLVNC'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&uid='.$uid.'&_vnc=html\'"/>';
 }
-$javavnc = '&nbsp;&nbsp;<input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_JavaVNC'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&_vnc=java\'"/>';
-$buttons = '<div align="center">' . $javavnc . $htmlvnc . '<br><br><input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_refresh'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&_vnc=java\'"/></div><br>';
+$javavnc = '&nbsp;&nbsp;<input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_JavaVNC'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&uid='.$uid.'&_vnc=java\'"/>';
+$buttons = '<div align="center">' . $javavnc . $htmlvnc . '<br><br><input type="button" class="button" name="" id="" value="' . $_LANG['solusvmpro_refresh'] . '" onClick="window.location=\'vnc.php?id=' . $servid . '&uid='.$uid.'&_vnc=java\'"/></div><br>';
 if ( $_GET['_vnc'] == "java" ) {
     $pagedata = $buttons . '<div align="center"><APPLET CODE="VncViewer.class" ARCHIVE="java/vnc/VncViewer.jar">
             <PARAM NAME="Open new window" VALUE=Yes>

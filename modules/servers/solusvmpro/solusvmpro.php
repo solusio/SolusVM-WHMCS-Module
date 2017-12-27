@@ -177,6 +177,7 @@ function solusvmpro_CreateAccount( $params ) {
         $cbandwidth = $solusvm->getCbandwidth();
         $ccpu       = $solusvm->getCcpu();
         $cextraip   = $solusvm->getCextraip();
+        $cnspeed    = $solusvm->getCnspeed();
 
         #########################################
 
@@ -252,6 +253,7 @@ function solusvmpro_CreateAccount( $params ) {
             "custombandwidth" => $cbandwidth,
             "customdiskspace" => $cdisk,
             "custommemory"    => $cmem,
+            "customnspeed"    => $cnspeed,
             "hvmt"            => "1",
             "type"            => $vt,
             "nodegroup"       => $buildGroup,
@@ -677,6 +679,7 @@ function solusvmpro_ChangePackage( $params ) {
         $cdisk      = $solusvm->getCdisk();
         $ccpu       = $solusvm->getCcpu();
         $cextraip   = $solusvm->getCextraip();
+        $cnspeed    = $solusvm->getCnspeed();
         #########################################
 
         //Apply custom resources
@@ -705,6 +708,14 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $ccpu > 0 ){
                 $solusvm->apiCall( 'vserver-change-cpu', array( "cpu" => $ccpu, "vserverid" => $customField["vserverid"] ) );
+                if ( $solusvm->result["status"] != "success" ) {
+                    $resource_errors .= (string) $solusvm->result["statusmsg"];
+                }
+
+            }
+
+            if ( $cnspeed >= 0 ){
+                $solusvm->apiCall( 'vserver-change-nspeed', array( "customnspeed" => $cnspeed, "vserverid" => $customField["vserverid"] ) );
                 if ( $solusvm->result["status"] != "success" ) {
                     $resource_errors .= (string) $solusvm->result["statusmsg"];
                 }

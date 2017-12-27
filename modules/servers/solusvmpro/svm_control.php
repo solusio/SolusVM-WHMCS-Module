@@ -178,7 +178,7 @@ if ( $r["status"] == "success" ) {
             $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/console.php?id=' . $serviceid . '&uid='.$uid.'\', \'_blank\',\'width=830,height=750,status=no,location=no,toolbar=no,scrollbars=1,menubar=no\')">' . $_LANG["solusvmpro_serialConsole"] . '</button>';
             $cpass   = '';
         } else {
-            $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/vnc.php?id=' . $serviceid . '\', \'_blank\',\'width=800,height=600,status=no,location=no,toolbar=no,menubar=no,,scrollbars=1,resizable=yes\')">' . $_LANG['solusvmpro_vnc'] . '</button>';
+            $console = '<button type="button" class="btn btn-default" onclick="window.open(\'../modules/servers/solusvmpro/vnc.php?id=' . $serviceid . '&uid='.$uid.'\', \'_blank\',\'width=800,height=600,status=no,location=no,toolbar=no,menubar=no,,scrollbars=1,resizable=yes\')">' . $_LANG['solusvmpro_vnc'] . '</button>';
             $cpass   = '
                 <script type="text/javascript" src="/modules/servers/solusvmpro/js/vncpassword.js"></script>
                 <script type="text/javascript">
