@@ -42,4 +42,9 @@ $r = $solusvm->result;
 
 $cparams = $solusvm->clientAreaCalculations( $r );
 
+if($r['rescuemode'] != 0){
+    $solusvm->apiCall( 'vserver-rescue', $callArray );
+    $cparams['rescueData'] = $solusvm->result;
+}
+
 echo json_encode( $cparams );
