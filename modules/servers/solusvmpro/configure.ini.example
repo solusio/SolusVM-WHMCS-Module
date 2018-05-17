@@ -1,8 +1,13 @@
 ; This is a test configuration file
-; Comments start with ';', as in php.ini
+; Comments start with ';'
 
 debug = true
 
+; UsageUpdate
+;enableUsageUpdate = true
+;updateIntervalDay = 2
+
+; Theme Customizations
 ; Virtual Server color status (hex color)
 ;statusOnlineColor = 0C0
 ;statusOfflineColor = F00
