@@ -22,7 +22,7 @@ class SolusVM {
     protected $configOptionUsernamePrefix;
     protected $serviceid;
     protected $pid;
-    protected $configIni;
+    public $configIni;
     public $result = '';
     public $rawResult = '';
     public $cpHostname;
