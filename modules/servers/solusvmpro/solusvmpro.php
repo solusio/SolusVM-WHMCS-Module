@@ -1152,10 +1152,13 @@ function solusvmpro_UsageUpdate($params)
     if (!isset($solusvm->configIni['enableUsageUpdate']) || !$solusvm->configIni['enableUsageUpdate']) {
         return false;
     }
-    $ownerRowsHosting = Capsule::table('tblhosting')->where('domainstatus', 'Active')->where('server', $params['serverid']);
+    $ownerRowsHosting = Capsule::table('tblhosting')->whereIn('domainstatus', ['Active', 'Suspended'])->where('server', $params['serverid']);
 
     if (isset($solusvm->configIni['updateIntervalDay'])) {
         $ownerRowsHosting->whereRaw('lastupdate < DATE_ADD(CURDATE(),INTERVAL -' . $solusvm->configIni['updateIntervalDay'] . ' DAY)');
+    }
+    if (isset($solusvm->configIni['updateServiceCount'])) {
+        $ownerRowsHosting->limit($solusvm->configIni['updateServiceCount'])->orderBy('lastupdate');
     }
     $ownerRows = $ownerRowsHosting->get();
 
