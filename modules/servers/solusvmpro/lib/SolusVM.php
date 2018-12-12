@@ -852,8 +852,8 @@ class SolusVM {
 
     public function clientAreaCommands()
     {
-
-        if ($_POST['logintosolusvm']) {
+        global $whmcs;
+        if ($whmcs->get_req_var('logintosolusvm') === 'Manage') {
 
             if ($this->getExtData("clientkeyauthreturnurl") != "") {
                 $sysurl = $this->getExtData("clientkeyauthreturnurl");
