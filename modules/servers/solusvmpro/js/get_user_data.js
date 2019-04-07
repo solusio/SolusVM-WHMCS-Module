@@ -47,7 +47,8 @@ $(function () {
                 $("#controlpanellink").attr("onclick", "window.open('" + data.controlpanellink + "','_blank')");
             }
 
-            var optionsIds = ["displayreboot", "displayshutdown", "displayboot", "displayconsole", "displayhtml5console", "displayvnc", "displayrootpassword", "displayhostname", "displayvncpassword", "displaypanelbutton", "displayclientkeyauth", "displaytunenable", "displaytundisable"];
+            var optionsIds = ["displayreboot", "displayshutdown", "displayboot", "displayconsole", "displayhtml5console", "displayvnc", "displayrootpassword", "displayhostname", "displayvncpassword", "displayrescuemode", "displaypanelbutton", "displayclientkeyauth", "displaytunenable", "displaytundisable"];
+
             var showOptions = false;
             optionsIds.forEach(function (v) {
                 if (data.hasOwnProperty(v)) {
@@ -93,6 +94,21 @@ $(function () {
                 $('#hddgraph').show();
                 $('#hddgraphurlImg').attr('src', data.hddgraphurl);
             }
+
+            //rescueMode
+            if (data.rescuemode == 0) {
+                $('#rescueEnabled').show();
+                $('#rescueDisabled').remove();
+            }else if(data.rescueData){
+                $('#rescueDisabled').show();
+                $('#rescueEnabled').remove();
+
+                $('#rescueip').html(data.rescueData.ip);
+                $('#rescueport').html(data.rescueData.port);
+                $('#rescueuser').html(data.rescueData.user);
+                $('#rescuepassword').html(data.rescueData.password);
+            }
+
 
         }).fail(function (jqXHR, textStatus) {
             $('#displayState').hide();

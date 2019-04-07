@@ -22,7 +22,7 @@ class SolusVM {
     protected $configOptionUsernamePrefix;
     protected $serviceid;
     protected $pid;
-    protected $configIni;
+    public $configIni;
     public $result = '';
     public $rawResult = '';
     public $cpHostname;
@@ -614,8 +614,8 @@ class SolusVM {
                 "displaytrafficgraph"  => 0,
                 "displayloadgraph"     => 0,
                 "displaymemorygraph"   => 0,
+                "displayrescuemode"    => 0,
             );
-
 
             $vstatusAr = array(
                 'online'  => array(
@@ -744,14 +744,19 @@ class SolusVM {
                 $cparams["ipcsv"]      = $result["ipaddresses"];
             }
             $cparams["mainip"] = $result["mainipaddress"];
-            if ( $result["type"] == "openvz" || $result["type"] == "xen" ) {
-                if ( $this->getExtData( "html5serialconsole" ) != "disable" ) {
-                    $cparams["displayhtml5console"] = 1;
-                }
-            }
+
             if ( $result["type"] == "openvz" || $result["type"] == "xen" ) {
                 if ( $this->getExtData( "serialconsole" ) != "disable" ) {
                     $cparams["displayconsole"] = 1;
+                }
+                if ( $this->getExtData( "rootpassword" ) != "disable" ) {
+                    $cparams["displayrootpassword"] = 1;
+                }
+                if ( $this->getExtData( "hostname" ) != "disable" ) {
+                    $cparams["displayhostname"] = 1;
+                }
+                if ( $this->getExtData( "html5serialconsole" ) != "disable" ) {
+                    $cparams["displayhtml5console"] = 1;
                 }
             } else {
                 if ( $this->getExtData( "vnc" ) != "disable" ) {
@@ -762,22 +767,16 @@ class SolusVM {
                 }
             }
 
+            if ( $result['type'] == 'kvm' ) {
+                $cparams['displayrescuemode'] = 1;
+                $cparams['rescuemode'] = $result['rescuemode'];
+            }
+
             if ( $this->getExtData( "controlpanelbutton" ) != "" ) {
                 $cparams["displaypanelbutton"] = 1;
                 $cparams["controlpanellink"]   = $this->getExtData( "controlpanelbutton" );
             }
 
-            if ( $result["type"] == "openvz" || $result["type"] == "xen" ) {
-                if ( $this->getExtData( "rootpassword" ) != "disable" ) {
-                    $cparams["displayrootpassword"] = 1;
-                }
-            }
-
-            if ( $this->getExtData( "hostname" ) != "disable" ) {
-                if ( $result["type"] == "openvz" || $result["type"] == "xen" ) {
-                    $cparams["displayhostname"] = 1;
-                }
-            }
 
             if ( $this->getExtData( "reboot" ) != "disable" ) {
                 $cparams["displayreboot"] = 1;
