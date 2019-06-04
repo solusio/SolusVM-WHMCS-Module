@@ -728,6 +728,13 @@ function solusvmpro_ChangePackage( $params ) {
                 $ips = $ipaddresses[0]->assignedips;
 
                 $lines_arr = explode(PHP_EOL, $ips);
+                $ipsV4 = [];
+                foreach($lines_arr as $ip) {
+                    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                        $ipsV4[] = $ip;
+                    }
+                }
+                $lines_arr = $ipsV4;
                 $num_current_ips = count($lines_arr);
                 if( empty($lines_arr[0]) ){
                     $num_current_ips -= 1;
