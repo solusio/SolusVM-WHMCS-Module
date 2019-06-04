@@ -6,6 +6,7 @@ debug = true
 ; UsageUpdate
 ;enableUsageUpdate = true
 ;updateIntervalDay = 2
+;updateServiceCount = 100
 
 ; Theme Customizations
 ; Virtual Server color status (hex color)
