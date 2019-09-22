@@ -1068,7 +1068,7 @@ function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
 }
 
 function solusvmpro_ClientArea( $params ) {
-    $notCustomFuntions = [ 'reboot', 'shutdown', 'boot' ];
+    $notCustomFuntions = [ 'reboot', 'shutdown', 'boot', 'tuntap_enable', 'tuntap_disable' ];
     if ( isset( $_GET['modop'] ) && ( $_GET['modop'] == 'custom' ) ) {
         if ( isset( $_GET['a'] ) && !in_array( $_GET['a'], $notCustomFuntions ) ) {
             $functionName = 'solusvmpro_' . 'Custom_' . $_GET['a'];
