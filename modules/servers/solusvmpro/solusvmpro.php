@@ -71,7 +71,7 @@ function solusvmpro_ConfigOptions() {
         ## List plans
         $solusvm->apiCall( 'listplans', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $default_plan = $solusvm->result["plans"];
         } else {
             $default_plan = $solusvm->rawResult;
@@ -80,7 +80,7 @@ function solusvmpro_ConfigOptions() {
         ## List nodes
         $solusvm->apiCall( 'listnodes', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $default_node = $solusvm->result["nodes"];
         } else {
             $default_node = $solusvm->rawResult;
@@ -89,7 +89,7 @@ function solusvmpro_ConfigOptions() {
         ## List node groups
         $solusvm->apiCall( 'listnodegroups', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $default_nodegroup = $solusvm->result["nodegroups"];
         } else {
             $default_nodegroup = $solusvm->rawResult;
@@ -98,7 +98,7 @@ function solusvmpro_ConfigOptions() {
         ## List templates
         $solusvm->apiCall( 'listtemplates', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $default_template = $solusvm->result["templates"];
         } else {
             $default_template = $solusvm->rawResult;
@@ -382,7 +382,7 @@ function solusvmpro_SuspendAccount( $params ) {
 
         $solusvm->apiCall( 'vserver-suspend', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
@@ -432,7 +432,7 @@ function solusvmpro_UnsuspendAccount( $params ) {
 
         $solusvm->apiCall( 'vserver-unsuspend', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
@@ -486,7 +486,7 @@ function solusvmpro_TerminateAccount( $params ) {
 
         $solusvm->apiCall( 'vserver-terminate', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $solusvm->removeipTerminatedProduct();
 
             $solusvm->removevserveridTerminatedProduct();
@@ -564,7 +564,7 @@ function solusvmpro_reboot( $params ) {
 
         $solusvm->apiCall( 'vserver-reboot', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
@@ -599,7 +599,7 @@ function solusvmpro_boot( $params ) {
 
         $solusvm->apiCall( 'vserver-boot', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
@@ -634,7 +634,7 @@ function solusvmpro_shutdown( $params ) {
 
         $solusvm->apiCall( 'vserver-shutdown', $callArray );
 
-        if ( $solusvm->result["status"] == "success" ) {
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
@@ -692,7 +692,7 @@ function solusvmpro_ChangePackage( $params ) {
                 $cmem = str_replace(":", "|", $cmem);
 
                 $solusvm->apiCall( 'vserver-change-memory', array( "memory" => $cmem, "vserverid" => $customField["vserverid"] ) );
-                if ( $solusvm->result["status"] != "success" ) {
+                if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                     $resource_errors = (string) $solusvm->result["statusmsg"] . $error_divider;
                 }
 
@@ -700,7 +700,7 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $cdisk > 0 ){
                 $solusvm->apiCall( 'vserver-change-hdd', array( "hdd" => $cdisk, "vserverid" => $customField["vserverid"] ) );
-                if ( $solusvm->result["status"] != "success" ) {
+                if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                     $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
                 }
 
@@ -708,7 +708,7 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $ccpu > 0 ){
                 $solusvm->apiCall( 'vserver-change-cpu', array( "cpu" => $ccpu, "vserverid" => $customField["vserverid"] ) );
-                if ( $solusvm->result["status"] != "success" ) {
+                if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                     $resource_errors .= (string) $solusvm->result["statusmsg"];
                 }
 
@@ -716,7 +716,7 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $cnspeed >= 0 ){
                 $solusvm->apiCall( 'vserver-change-nspeed', array( "customnspeed" => $cnspeed, "vserverid" => $customField["vserverid"] ) );
-                if ( $solusvm->result["status"] != "success" ) {
+                if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                     $resource_errors .= (string) $solusvm->result["statusmsg"];
                 }
 
@@ -741,7 +741,7 @@ function solusvmpro_ChangePackage( $params ) {
 
                         $solusvm->apiCall( 'vserver-addip', array( "vserverid" => $customField["vserverid"] ) );
 
-                        if ( $solusvm->result["status"] != "success" ) {
+                        if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                             $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
                             break;
                         } else {
@@ -755,7 +755,7 @@ function solusvmpro_ChangePackage( $params ) {
 
                         $solusvm->apiCall( 'vserver-delip', array( "vserverid" => $customField["vserverid"], "ipaddr" => $lines_arr[0]) );
 
-                        if ( $solusvm->result["status"] != "success" ) {
+                        if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                             $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
                             break;
                         } else {
@@ -781,7 +781,7 @@ function solusvmpro_ChangePackage( $params ) {
                 "vserverid"       => $customField["vserverid"]
             );
             $solusvm->apiCall( 'vserver-change', $callArray );
-            if ( $solusvm->result["status"] == "success" ) {
+            if ( $solusvm->isSuccessResponse($solusvm->result) ) {
                 $result = "success";
             } else {
                 $result = (string) $solusvm->result["statusmsg"];
@@ -867,14 +867,19 @@ function solusvmpro_AdminServicesTabFields( $params ) {
 if ( ! function_exists( 'solusvmpro_AdminLink' ) ) {
     function solusvmpro_AdminLink( $params ) {
         try {
-            $solusvm = new SolusVM( $params );
+            $solusvm = new SolusVM($params);
 
-            $fwdurl = $solusvm->apiCall( 'fwdurl' );
+            $fwdurl = $solusvm->apiCall('fwdurl');
 
-            $code = '<form action="' . ( $fwdurl ) . '/admincp/login.php" method="post" target="_blank">
-                <input type="hidden" name="username" value="ADMINUSERNAME" />
-                <input type="hidden" name="password" value="ADMINPASSOWRD" />
-                <input type="submit" name="Submit" value="Login" />
+            $solusAdminId = (int)$solusvm->getExtData("login-button-admin-id");
+
+            $code = '<form action="' . ($fwdurl) . '/admincp/login-api.php" method="post" target="_blank">';
+            if (isset($solusAdminId) && $solusAdminId > 0) {
+                $code .= '<input type="hidden" name="admin_id" value="' . $solusAdminId . '" />';
+            }
+            $code .='<input type="hidden" name="api_id" value="'.$params["serverusername"].'" />
+                <input type="hidden" name="api_key" value="'.sha1($params["serverpassword"]).'" />
+                <input type="submit" name="Submit" class="btn btn-sm btn-default" value="Login" />
                 </form>';
 
             return $code;
@@ -1097,7 +1102,7 @@ function solusvmpro_ClientArea( $params ) {
                 $callArray = array( "vserverid" => $customField["vserverid"], "nographs" => false );
                 $solusvm->apiCall( 'vserver-infoall', $callArray );
 
-                if ( $solusvm->result["status"] == "success" ) {
+                if ( $solusvm->isSuccessResponse($solusvm->result) ) {
                     $data = $solusvm->clientAreaCalculations( $solusvm->result );
 
                     return solusvmpro_customclientarea( $params, $data );
