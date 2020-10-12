@@ -25,10 +25,11 @@ SolusVM::loadLang();
 function initConfigOption()
 {
     if(!isset($_POST['id'])){
-        $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_GET['id'])->get();
+        $data = SolusVM::collectionToArray(Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_GET['id'])->get());
     }else{
-        $data = Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get();
+        $data = SolusVM::collectionToArray(Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get());
     }
+    
     $packageconfigoption = [];
     if(is_array($data) && count($data) > 0) {
         $packageconfigoption[1] = $data[0]->configoption1;
@@ -47,7 +48,7 @@ function solusvmpro_ConfigOptions() {
 
         $master_array = array();
         /** @var stdClass $row */
-        foreach ( Capsule::table( 'tblservers' )->where( 'type', 'solusvmpro' )->get() as $row ) {
+        foreach ( SolusVM::collectionToArray(Capsule::table( 'tblservers' )->where( 'type', 'solusvmpro' )->get()) as $row ) {
             $master_array[] = $row->id . " - " . $row->name;
         }
 
@@ -724,7 +725,7 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $cextraip > 0 ){
                 //first() function doesn't work
-                $ipaddresses = Capsule::table('tblhosting')->select('assignedips')->where( 'id', $params['serviceid'] )->get();
+                $ipaddresses = SolusVM::collectionToArray(Capsule::table('tblhosting')->select('assignedips')->where( 'id', $params['serviceid'] )->get());
                 $ips = $ipaddresses[0]->assignedips;
 
                 $lines_arr = explode(PHP_EOL, $ips);

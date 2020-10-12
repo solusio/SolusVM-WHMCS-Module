@@ -4,7 +4,8 @@ namespace SolusVM;
 
 use SolusVM\Curl;
 use Illuminate\Database\Capsule\Manager as Capsule;
-
+use Illuminate\Support\Collection as Collection;
+use Exception;
 
 class SolusVM {
     protected $url;
@@ -975,7 +976,7 @@ class SolusVM {
 
     public static function getParamsFromVserviceID( $vserverid, $uid ) {
         /** @var stdClass $hosting */
-        foreach ( Capsule::table( 'tblhosting' )->where( 'userid', $uid )->get() as $hosting ) {
+        foreach ( SolusVM::collectionToArray(Capsule::table( 'tblhosting' )->where( 'userid', $uid )->get()) as $hosting ) {
 
             $vserverFieldRow = Capsule::table( 'tblcustomfields' )->where( 'relid', $hosting->packageid )->where( 'fieldname', 'vserverid' )->first();
             if ( ! $vserverFieldRow ) {
@@ -1090,6 +1091,23 @@ class SolusVM {
 
         $this->debugLog( 'solusvmpro', 'isSuccessResponse', '', $result, '', array() );
         return false;
+    }
+
+    /**
+     * Converts Collection to array if required
+     *
+     * @param array|Collection|any $object arbitrary object.
+     *
+     * @return array
+     */
+    public function collectionToArray($object) {
+        if (is_array($object)) {
+            return $object;
+        }
+        if ($object instanceof Collection) {
+            return $object->toArray();
+        }
+        throw new Exception('Object is not an array or Illuminate\Support\Collection');
     }
 }
 
