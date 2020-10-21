@@ -1,2 +1,2 @@
 
-[SolusVM WHMCS Module Documentation](https://documentation.solusvm.com/display/DOCS/WHMCS)
+[SolusVM WHMCS Module Documentation](https://docs.solusvm.com/display/BET/SolusVM+WHMCS+billing+module)
