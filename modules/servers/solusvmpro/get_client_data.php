@@ -8,6 +8,7 @@ require_once __DIR__ . '/lib/Curl.php';
 require_once __DIR__ . '/lib/CaseInsensitiveArray.php';
 require_once __DIR__ . '/lib/SolusVM.php';
 
+use Composer\Semver\Comparator;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use SolusVM\SolusVM;
 
@@ -21,7 +22,12 @@ if ( ! $ca->isLoggedIn() ) {
     exit();
 }
 
+// Adding this to workaround CORE-15619 WHMCS bug
+$whmcsVersion = $CONFIG['Version'];
 $uid = $ca->getUserID();
+if (Comparator::greaterThanOrEqualTo($whmcsVersion,'8')) {
+    $uid = Auth::client()->id;
+}
 
 $params = SolusVM::getParamsFromVserviceID( $vserverid, $uid );
 if ( ! $params ) {
