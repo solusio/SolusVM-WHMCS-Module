@@ -1073,6 +1073,43 @@ function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
 
 }
 
+function mf_solusvmpro_RebuildVirtualServer( $params, $os ) {
+    global $_LANG;
+
+    try {
+        $solusvm     = new SolusVM( $params );
+        $customField = $solusvm->getParam( "customfields" );
+
+        ## The call string for the connection fuction
+        $callArray = array(
+            "vserverid" => $customField["vserverid"],
+            "template" => $os,
+        );
+
+        $solusvm->apiCall( 'vserver-rebuild', $callArray );
+
+        if ( $solusvm->isSuccessResponse($solusvm->result) ) {
+            $result = "success";
+        } else {
+            $result = (string) $solusvm->result["statusmsg"];
+        }
+
+        return $result;
+    } catch ( Exception $e ) {
+        // Record the error in WHMCS's module log.
+        logModuleCall(
+            'rebuild',
+            __FUNCTION__,
+            $params,
+            $e->getMessage(),
+            $e->getTraceAsString()
+        );
+
+        return $e->getMessage();
+    }
+
+}
+
 function solusvmpro_ClientArea( $params ) {
     $notCustomFuntions = [ 'reboot', 'shutdown', 'boot' ];
     if ( isset( $_GET['modop'] ) && ( $_GET['modop'] == 'custom' ) ) {
@@ -1116,9 +1153,45 @@ function solusvmpro_ClientArea( $params ) {
                     }
                 }
             } else {
+
+                $rebuild = false;
+                if (isset($_POST['change_os']) && isset($_POST['vserver_templates'])){
+                    $os = $_POST['vserver_templates'];
+                    $rebuild = mf_solusvmpro_RebuildVirtualServer($params, $os);
+                }
+
+                #--------------- get templates
+                $packageconfigoption = initConfigOption();
+                $vt = '';
+                if ( $packageconfigoption[5] == "OpenVZ" ) {
+                    $vt = "openvz";
+                } elseif ( $packageconfigoption[5] == "Xen-PV" ) {
+                    $vt = "xen";
+                } elseif ( $packageconfigoption[5] == "Xen-HVM" ) {
+                    $vt = "xen hvm";
+                } elseif ( $packageconfigoption[5] == "KVM" ) {
+                    $vt = "kvm";
+                }
+                $callArray = array( "type" => $vt );
+                ## List templates
+                $solusvm->apiCall( 'listtemplates', $callArray );
+
+                if ( $solusvm->isSuccessResponse($solusvm->result) ) {
+                    $default_template = $solusvm->result["templates"];
+                } else {
+                    $default_template = $solusvm->rawResult;
+                }
+                $default_template = explode(',', $default_template);
+                #--------------- get templates
+
                 $data = array(
                     'vserverid' => $customField["vserverid"],
+                    'templates' => $default_template,
                 );
+
+                if($rebuild !== false){
+                    $data['rebuild_os'] = $rebuild;
+                }
 
                 return array(
                     'templatefile' => 'templates/clientareaBootstrap.tpl',
