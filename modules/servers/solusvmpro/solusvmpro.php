@@ -880,6 +880,7 @@ if ( ! function_exists( 'solusvmpro_AdminLink' ) ) {
             }
             $code .='<input type="hidden" name="api_id" value="'.$params["serverusername"].'" />
                 <input type="hidden" name="api_key" value="'.sha1($params["serverpassword"]).'" />
+                <input type="hidden" name="hostname" value="'.$_SERVER['HTTP_REFERER'].'" />
                 <input type="submit" name="Submit" class="btn btn-sm btn-default" value="Login" />
                 </form>';
 
