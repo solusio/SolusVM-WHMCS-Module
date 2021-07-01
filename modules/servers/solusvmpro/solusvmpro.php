@@ -5,9 +5,9 @@
  *
  */
 
-require_once __DIR__ . '/lib/Curl.php';
-require_once __DIR__ . '/lib/CaseInsensitiveArray.php';
-require_once __DIR__ . '/lib/SolusVM.php';
+require_once ROOTDIR . '/modules/servers/solusvmpro/lib/Curl.php';
+require_once ROOTDIR . '/modules/servers/solusvmpro/lib/CaseInsensitiveArray.php';
+require_once ROOTDIR . '/modules/servers/solusvmpro/lib/SolusVM.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 use SolusVM\SolusVM;
@@ -16,8 +16,8 @@ if ( ! defined( "WHMCS" ) ) {
     die( "This file cannot be accessed directly" );
 }
 
-if ( file_exists( __DIR__ . "/custom.php" ) ) {
-    require_once( __DIR__ . "/custom.php" );
+if ( file_exists( ROOTDIR . "/custom.php" ) ) {
+    require_once( ROOTDIR . "/modules/servers/solusvmpro/custom.php" );
 }
 
 SolusVM::loadLang();
