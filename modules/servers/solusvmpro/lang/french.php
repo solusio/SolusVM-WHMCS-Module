@@ -7,7 +7,7 @@ if ( ! defined( "WHMCS" ) ) {
 
 $_LANG['solusvmpro_reboot']                               = 'Redémarrer';
 $_LANG['solusvmpro_boot']                                 = 'Démarrage';
-$_LANG['solusvmpro_shutdown']                             = 'Fermer';
+$_LANG['solusvmpro_shutdown']                             = 'Eteindre';
 $_LANG['solusvmpro_serialConsole']                        = 'Serial Console';
 $_LANG['solusvmpro_html5Console']                         = 'Console série HTML 5';
 $_LANG['solusvmpro_vnc']                                  = 'VNC';
@@ -22,7 +22,7 @@ $_LANG['solusvmpro_bandwidth']                            = 'Bande passante';
 $_LANG['solusvmpro_memory']                               = 'Mémoire';
 $_LANG['solusvmpro_of']                                   = 'de';
 $_LANG['solusvmpro_used']                                 = 'Utilisé';
-$_LANG['solusvmpro_free']                                 = 'Gratuit';
+$_LANG['solusvmpro_free']                                 = 'Libre';
 $_LANG['solusvmpro_status']                               = 'Statut';
 $_LANG['solusvmpro_ipAddress']                            = 'Adresse IP';
 $_LANG['solusvmpro_unavailable']                          = 'Indisponible';
