@@ -681,10 +681,11 @@ function solusvmpro_ChangePackage( $params ) {
         $ccpu       = $solusvm->getCcpu();
         $cextraip   = $solusvm->getCextraip();
         $cnspeed    = $solusvm->getCnspeed();
+        $cbandwidth = $solusvm->getCbandwidth();
         #########################################
 
         //Apply custom resources
-        if ( !empty($cmem) || !empty($cdisk) || !empty($ccpu) || !empty($cextraip) ){
+        if ( !empty($cmem) || !empty($cdisk) || !empty($ccpu) || !empty($cextraip) || !empty($cbandwidth) ){
 
             $resource_errors = "";
             $error_divider = " ";
@@ -717,6 +718,14 @@ function solusvmpro_ChangePackage( $params ) {
 
             if ( $cnspeed >= 0 ){
                 $solusvm->apiCall( 'vserver-change-nspeed', array( "customnspeed" => $cnspeed, "vserverid" => $customField["vserverid"] ) );
+                if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
+                    $resource_errors .= (string) $solusvm->result["statusmsg"];
+                }
+
+            }
+            
+            if ( $cbandwidth > 0 ){
+                $solusvm->apiCall( 'vserver-bandwidth', array( "limit" => $cbandwidth, "vserverid" => $customField["vserverid"] ) );
                 if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                     $resource_errors .= (string) $solusvm->result["statusmsg"];
                 }
@@ -1264,4 +1273,3 @@ if ( ! function_exists( 'solusvmpro_customclientareaunavailable' ) ) {
         return $output;
     }
 }
-
