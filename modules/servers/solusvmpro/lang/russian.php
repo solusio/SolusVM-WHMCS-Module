@@ -50,6 +50,7 @@ $_LANG['solusvmpro_enterVNCPassword']        			  = 'Введите пароль
 $_LANG['solusvmpro_confirmRootPassword']     			  = 'Повторите пароль для root';
 $_LANG['solusvmpro_confirmVNCPassword']      			  = 'Повторите пароль для VNC';
 $_LANG['solusvmpro_confirmErrorPassword']    			  = 'Пароли не совпадают';
+$_LANG['solusvmpro_kvmVncPasswordLengthError']           = 'Длина пароля VNC для KVM не может быть больше 8 символов';
 $_LANG['solusvmpro_virtualizationTypeError'] 			  = 'Функция не поддерживается для этого типа виртуализации';
 $_LANG['solusvmpro_unknownError']            			  = 'Неизвестная ошибка. Обратитесь в службу поддержки';
 $_LANG['solusvmpro_invalidHostname']         			  = 'Неверный адрес';

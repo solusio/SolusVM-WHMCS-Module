@@ -50,6 +50,7 @@ $_LANG['solusvmpro_enterVNCPassword']                     = 'أدخل كلمة �
 $_LANG['solusvmpro_confirmRootPassword']                  = 'تأكيد كلمة مرور الجذر';
 $_LANG['solusvmpro_confirmVNCPassword']                   = 'تأكيد كلمة مرور فنك';
 $_LANG['solusvmpro_confirmErrorPassword']                 = 'يرجى التحقق من إدخال كلمة المرور وتأكيدها';
+$_LANG['solusvmpro_kvmVncPasswordLengthError']            = 'Length of KVM VNC password cannot be greater than 8 characters';
 $_LANG['solusvmpro_virtualizationTypeError']              = 'الدالة غير مدعمة لهذا النوع الظاهري';
 $_LANG['solusvmpro_unknownError']                         = 'خطأ غير معروف. اتصل بالدعم';
 $_LANG['solusvmpro_invalidHostname']                      = 'اسم مضيف غير صالح';
