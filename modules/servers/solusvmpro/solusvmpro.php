@@ -1051,23 +1051,27 @@ function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
             exit( json_encode( $result ) );
         }
 
-        $solusvm->apiCall( 'vserver-vncpassword', $callArray );
+        $solusvm->apiCall( 'vserver-vncpass', $callArray );
         $r = $solusvm->result;
 
         $message = '';
+        $isApiCallSuccessful = false;
         if ( $r["status"] == "success" ) {
             $solusvm->setCustomfieldsValue( 'vncpassword', $newvncpassword );
             $message = $_LANG['solusvmpro_passwordUpdated'];
+            $isApiCallSuccessful = true;
         } elseif ( $r["status"] == "error" && $r["statusmsg"] == "VNC password not specified" ) {
             $message = $_LANG['solusvmpro_enterPassword'];
         } elseif ( $r["status"] == "error" && $r["statusmsg"] == "Not supported for this virtualization type" ) {
             $message = $_LANG['solusvmpro_virtualizationTypeError'];
+        } elseif ( $r["status"] === "error" && $r["statusmsg"] === "Length of KVM VNC password cannot be greater than 8 characters." ) {
+            $message = $_LANG['solusvmpro_kvmVncPasswordLengthError'];
         } else {
             $message = $_LANG['solusvmpro_unknownError'];
         }
         //$message = "<PRE>" . print_r($r, true) . $solusvm->debugTxt;
         $result = (object) array(
-            'success' => true,
+            'success' => $isApiCallSuccessful,
             'msg'     => $message,
         );
         exit( json_encode( $result ) );

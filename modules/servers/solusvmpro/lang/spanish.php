@@ -50,6 +50,7 @@ $_LANG['solusvmpro_enterVNCPassword']                     = 'Ingresa la contrase
 $_LANG['solusvmpro_confirmRootPassword']                  = 'Confirmar una contraseña de root';
 $_LANG['solusvmpro_confirmVNCPassword']                   = 'Confirmar contraseña de VNC';
 $_LANG['solusvmpro_confirmErrorPassword']                 = 'Comprueba que has ingresado y confirmado tu contraseña.';
+$_LANG['solusvmpro_kvmVncPasswordLengthError']            = 'Length of KVM VNC password cannot be greater than 8 characters';
 $_LANG['solusvmpro_virtualizationTypeError']              = 'Función no admitida para este tipo de virtualización';
 $_LANG['solusvmpro_unknownError']                         = 'Error desconocido. Soporte de contacto';
 $_LANG['solusvmpro_invalidHostname']                      = 'Nombre de host no válido';
