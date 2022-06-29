@@ -31,7 +31,7 @@ function initConfigOption()
     }
     
     $packageconfigoption = [];
-    if(is_array($data) && count($data) > 0) {
+    if($data->isNotEmpty() && $data->count() > 0) {
         $packageconfigoption[1] = $data[0]->configoption1;
         $packageconfigoption[3] = $data[0]->configoption3;
         $packageconfigoption[5] = $data[0]->configoption5;
