@@ -29,7 +29,7 @@ function initConfigOption()
     }else{
         $data = SolusVM::collectionToArray(Capsule::table('tblproducts')->where('servertype', 'solusvmpro')->where('id', $_POST['id'])->get());
     }
-    
+
     $packageconfigoption = [];
     if(is_array($data) && count($data) > 0) {
         $packageconfigoption[1] = $data[0]->configoption1;
@@ -210,12 +210,12 @@ function solusvmpro_CreateAccount( $params ) {
 
         ## Update the username field
         Capsule::table( 'tblhosting' )
-               ->where( 'id', $serviceid )
-               ->update(
-                   [
-                       'username' => $clientUsername,
-                   ]
-               );
+            ->where( 'id', $serviceid )
+            ->update(
+                [
+                    'username' => $clientUsername,
+                ]
+            );
 
         $returnData["password"] = $r["password"];
 
@@ -308,12 +308,12 @@ function solusvmpro_CreateAccount( $params ) {
             ## Insert the dedicated ip
             $mainip = $r["mainipaddress"];
             Capsule::table( 'tblhosting' )
-                   ->where( 'id', $serviceid )
-                   ->update(
-                       [
-                           'dedicatedip' => $mainip,
-                       ]
-                   );
+                ->where( 'id', $serviceid )
+                ->update(
+                    [
+                        'dedicatedip' => $mainip,
+                    ]
+                );
 
             ## Update the hostname just in case solus changed it
             $solusvm->setHostname( $r["hostname"] );
@@ -324,12 +324,12 @@ function solusvmpro_CreateAccount( $params ) {
                 ## Remove the comma and replace with a line break
                 $iplist = str_replace( ",", "\n", $extraip );
                 Capsule::table( 'tblhosting' )
-                       ->where( 'id', $serviceid )
-                       ->update(
-                           [
-                               'assignedips' => $iplist,
-                           ]
-                       );
+                    ->where( 'id', $serviceid )
+                    ->update(
+                        [
+                            'assignedips' => $iplist,
+                        ]
+                    );
             }
             $result = "success";
 
@@ -723,7 +723,7 @@ function solusvmpro_ChangePackage( $params ) {
                 }
 
             }
-            
+
             if ( $cbandwidth > 0 ){
                 $solusvm->apiCall( 'vserver-bandwidth', array( "limit" => $cbandwidth, "vserverid" => $customField["vserverid"] ) );
                 if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
@@ -738,9 +738,12 @@ function solusvmpro_ChangePackage( $params ) {
                 $ips = $ipaddresses[0]->assignedips;
 
                 $lines_arr = explode(PHP_EOL, $ips);
-                $num_current_ips = count($lines_arr);
-                if( empty($lines_arr[0]) ){
-                    $num_current_ips -= 1;
+
+                $num_current_ips = 0;
+                foreach ($lines_arr as $ip) {
+                    if (filter_var(trim($ip), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+                        $num_current_ips++;
+                    }
                 }
 
                 $additional_ips_needed = $cextraip - $num_current_ips;
@@ -759,12 +762,12 @@ function solusvmpro_ChangePackage( $params ) {
                         }
                     }
 
-                } else {
+                }
 
+                if ( $additional_ips_needed < 0 ) {
                     for($i=0; $i>$additional_ips_needed;$i--){
 
                         $solusvm->apiCall( 'vserver-delip', array( "vserverid" => $customField["vserverid"], "ipaddr" => $lines_arr[0]) );
-
                         if ( !$solusvm->isSuccessResponse($solusvm->result) ) {
                             $resource_errors .= (string) $solusvm->result["statusmsg"] . $error_divider;
                             break;
@@ -773,6 +776,7 @@ function solusvmpro_ChangePackage( $params ) {
                         }
                     }
                 }
+                
             }
 
             $ipArr = implode(PHP_EOL, $lines_arr);
