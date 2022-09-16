@@ -471,3 +471,38 @@ Util.Flash = (function(){
     version = v.match(/\d+/g);
     return {version: parseInt(version[0] || 0 + '.' + version[1], 10) || 0, build: parseInt(version[2], 10) || 0};
 }()); 
+setTimeout(function(){
+    window.sendString = function (str) {
+        f(str.split(""));
+        function f(t) {
+            var character = t.shift();
+            var i=[];
+            var code = character.charCodeAt();
+            var needs_shift = character.match(/[A-Z!@#$%^&*()_+{}:\"<>?~|]/);
+            if (needs_shift) {
+                rfb.sendKey(XK_Shift_L,1);
+            }
+            rfb.sendKey(code,1);
+            rfb.sendKey(code,0);
+            if (needs_shift) {
+                rfb.sendKey(XK_Shift_L,0);
+            }
+
+
+            if (t.length > 0) {
+                setTimeout(function() {f(t);}, 10);
+            }
+        }
+    };
+    window.sendLongString = function(){
+        var text = prompt("Enter text to be sent to console, \"Enter / Return\" won't been sent.");
+        text?sendString(text):null;
+    };
+    var btn = document.createElement("input");
+    btn.setAttribute("id", "sendLongString");
+    btn.setAttribute("type", "button");
+    btn.setAttribute("value", "Paste clipboard");
+    document.getElementById("noVNC_buttons").appendChild(btn);
+    document.getElementById("sendLongString").style.display = "inline";
+    document.getElementById("sendLongString").onclick = sendLongString;
+},2000);
