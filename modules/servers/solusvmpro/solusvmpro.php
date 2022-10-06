@@ -922,7 +922,7 @@ function solusvmpro_Custom_ChangeHostname( $params = '' ) {
     if ( $check_section ) {
         ## The call string for the connection function
 
-        $callArray = array( "vserverid" => $_GET['vserverid'], "hostname" => $newhostname );
+        $callArray = array( "vserverid" => $params['customfields']['vserverid'], "hostname" => $newhostname );
 
         $solusvm = new SolusVM( $params );
 
@@ -979,7 +979,7 @@ function solusvmpro_Custom_ChangeRootPassword( $params = '' ) {
     $checkNewRootPassword = SolusVM::validateRootPassword( $newrootpassword );
     if ( $checkNewRootPassword ) {
         ## The call string for the connection function
-        $callArray = array( "vserverid" => $_GET['vserverid'], "rootpassword" => $newrootpassword );
+        $callArray = array( "vserverid" => $params['customfields']['vserverid'], "rootpassword" => $newrootpassword );
 
         $solusvm = new SolusVM( $params );
 
@@ -1036,7 +1036,7 @@ function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
     $checkNewVNCPassword = SolusVM::validateVNCPassword( $newvncpassword );
     if ( $checkNewVNCPassword ) {
         ## The call string for the connection function
-        $callArray = array( "vserverid" => $_GET['vserverid'], "vncpassword" => $newvncpassword );
+        $callArray = array( "vserverid" => $params['customfields']['vserverid'], "vncpassword" => $newvncpassword );
 
         $solusvm = new SolusVM( $params );
 
@@ -1234,7 +1234,7 @@ function solusvmpro_Custom_ChangeRescueMode( $params = '' ) {
 
     if ( $rescueValue && $rescueAction) {
         // The call string for the connection function
-        $callArray = array( 'vserverid' => $_GET['vserverid'], $rescueAction => $rescueValue );
+        $callArray = array( 'vserverid' => $params['customfields']['vserverid'], $rescueAction => $rescueValue );
         $solusvm = new SolusVM( $params );
 
         $solusvm->apiCall( 'vserver-rescue', $callArray );
