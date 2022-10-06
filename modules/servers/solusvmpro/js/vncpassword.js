@@ -38,7 +38,6 @@ $(function () {
             button.html('<span class="glyphicon glyphicon-refresh spinning"></span> ' + lang['solusvmpro_change']);
             button.prop('disabled', true);
             var ajaxData = {
-                vserverid: vserverid,
                 modop: 'custom',
                 a: 'ChangeVNCPassword',
                 newvncpassword: newvncpassword,
