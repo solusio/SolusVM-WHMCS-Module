@@ -201,7 +201,7 @@ class SolusVM {
         foreach ( $matches[1] as $k => $v ) {
             $result[ $v ] = $matches[2][ $k ];
         }
-        $this->debugLog( 'solusvmpro', 'process', $data, $result, $result, '' );
+        $this->debugLog( 'solusvmpro', 'process', $data, $result, $result, [] );
 
         return $result;
     }
@@ -231,10 +231,10 @@ class SolusVM {
 
     public function passwordGen( $length = 10, $chars = 'abcdefghijklmnopqrstuvwxyzABCEFGHIJKLMNOPQRSTUVWXYZ1234567890' ) {
         $chars_length = ( strlen( $chars ) - 1 );
-        $string       = $chars{rand( 0, $chars_length )};
+        $string       = $chars[rand( 0, $chars_length )];
         for ( $i = 1; $i < $length; $i = strlen( $string ) ) {
-            $r = $chars{rand( 0, $chars_length )};
-            if ( $r != $string{$i - 1} ) {
+            $r = $chars[rand( 0, $chars_length )];
+            if ( $r != $string[$i - 1]) {
                 $string .= $r;
             }
         }
@@ -660,10 +660,10 @@ class SolusVM {
             if ($result["state"] == "online" || $result["state"] == "offline") {
                 //Bandwidth graph
                 $bandwidthData    = explode(",", $result["bandwidth"]);
-                $usedBwPercentage = $bandwidthData[3];
-                $bandwidthData[1] = $bandwidthData[1] / 1024;
-                $bandwidthData[2] = $bandwidthData[2] / 1024;
-                $bandwidthData[0] = $bandwidthData[0] / 1024;
+                $usedBwPercentage = (int)$bandwidthData[3];
+                $bandwidthData[1] = (int)$bandwidthData[1] / 1024;
+                $bandwidthData[2] = (int)$bandwidthData[2] / 1024;
+                $bandwidthData[0] = (int)$bandwidthData[0] / 1024;
                 $bwUsed           = $this->bwFormat($bandwidthData[1]);
                 $bwFree           = $this->bwFormat($bandwidthData[2]);
                 $bwTotal          = $this->bwFormat($bandwidthData[0]);
@@ -691,10 +691,10 @@ class SolusVM {
                 if ($result["type"] == "openvz") {
                     if ($this->getExtData("memusage") != "disable") {
                         $memData           = explode(",", $result["memory"]);
-                        $usedMemPercentage = $memData[3];
-                        $memData[1]        = $memData[1] / 1024;
-                        $memData[2]        = $memData[2] / 1024;
-                        $memData[0]        = $memData[0] / 1024;
+                        $usedMemPercentage = (int)$memData[3];
+                        $memData[1]        = (int)$memData[1] / 1024;
+                        $memData[2]        = (int)$memData[2] / 1024;
+                        $memData[0]        = (int)$memData[0] / 1024;
                         $memUsed           = $this->bwFormat($memData[1]);
                         $memFree           = $this->bwFormat($memData[2]);
                         $memTotal          = $this->bwFormat($memData[0]);
@@ -721,10 +721,10 @@ class SolusVM {
                 if ($result["type"] == "openvz" || $result["type"] == "xen") {
                     if ($this->getExtData("diskusage") != "disable") {
                         $hddData           = explode(",", $result["hdd"]);
-                        $usedHddPercentage = $hddData[3];
-                        $hddData[1]        = $hddData[1] / 1024;
-                        $hddData[2]        = $hddData[2] / 1024;
-                        $hddData[0]        = $hddData[0] / 1024;
+                        $usedHddPercentage = (int)$hddData[3];
+                        $hddData[1]        = (int)$hddData[1] / 1024;
+                        $hddData[2]        = (int)$hddData[2] / 1024;
+                        $hddData[0]        = (int)$hddData[0] / 1024;
                         $hddUsed           = $this->bwFormat($hddData[1]);
                         $hddFree           = $this->bwFormat($hddData[2]);
                         $hddTotal          = $this->bwFormat($hddData[0]);
@@ -1100,7 +1100,7 @@ class SolusVM {
      *
      * @return array
      */
-    public function collectionToArray($object) {
+    public static function collectionToArray($object) {
         if (is_array($object)) {
             return $object;
         }

@@ -16,18 +16,18 @@
 #   ### server is ordered, if no hostname is specified.
 #   ###########################################################################
 #   ################################## CODE ###################################
-#   $serviceid = $params["serviceid"];
-#   $clientsdetails = $params["clientsdetails"];
-#   if(!empty($params[domain])) {
-#     $currentHost = $params[domain] {
-#       strlen($params[domain]) - 1}
+#   $serviceid = $params['serviceid'];
+#   $clientsdetails = $params['clientsdetails'];
+#   if(!empty($params['domain'])) {
+#     $currentHost = $params['domain'] {
+#       strlen($params['domain']) - 1}
 #     ;
 #     if(!strcmp($currentHost, ".")) {
-#       $newHost = substr($params[domain], 0, -1);
+#       $newHost = substr($params['domain'], 0, -1);
 #       mysql_real_escape_string($newHost);
 #       mysql_query("UPDATE tblhosting SET `domain` = '$newHost' WHERE `id` = '$serviceid'");
 #     } else {
-#       $newHost = $params[domain];
+#       $newHost = $params['domain'];
 #     }
 #   } else {
 #     $newHost = "vps" . $serviceid . $clientsdetails['id'] . ".EXAMPLEDOMAIN.COM";
@@ -56,7 +56,7 @@
 #   ### from the server list in whmcs
 #   ###########################################################################
 #   ################################## CODE ###################################
-#   $code = '<form action="https://' . $params["serverip"] . ':5656/admincp/login.php" method="post" target="_blank">
+#   $code = '<form action="https://' . $params['serverip'] . ':5656/admincp/login.php" method="post" target="_blank">
 #             <input type="hidden" name="username" value="ADMINUSERNAME" />
 #             <input type="hidden" name="password" value="ADMINPASSOWRD" />
 #             <input type="submit" name="Submit" value="Login" />
