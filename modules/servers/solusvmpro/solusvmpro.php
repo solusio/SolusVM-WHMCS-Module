@@ -732,6 +732,7 @@ function solusvmpro_ChangePackage( $params ) {
 
             }
 
+            $lines_arr = [];
             if ( $cextraip > 0 ){
                 //first() function doesn't work
                 $ipaddresses = SolusVM::collectionToArray(Capsule::table('tblhosting')->select('assignedips')->where( 'id', $params['serviceid'] )->get());
@@ -1199,12 +1200,12 @@ function solusvmpro_UsageUpdate($params)
             $r = json_decode($res);
 
             $bandwidthData = explode(',', $r->bandwidth);
-            $bwusage = round($bandwidthData[1] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
-            $bwlimit = round($bandwidthData[0] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
+            $bwusage = round((int)$bandwidthData[1] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
+            $bwlimit = round((int)$bandwidthData[0] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
 
             $hddData = explode(',', $r->hdd);
-            $diskusage = round($hddData[1] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
-            $disklimit = round($hddData[0] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
+            $diskusage = round((int)$hddData[1] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
+            $disklimit = round((int)$hddData[0] / 1024 ** 2, 0, PHP_ROUND_HALF_UP);
 
             Capsule::table('tblhosting')
                 ->where('id', $ownerRow->id)
