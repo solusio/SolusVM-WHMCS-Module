@@ -16,7 +16,7 @@ $(function () {
             }
 
             var msgSuccess = $('#rescuemodeMsgSuccess');
-            var msgError = $('#rescuemodedMsgError');
+            var msgError = $('#rescuemodeMsgError');
             msgSuccess.hide();
             msgError.hide();
             var showSuccessOrErrorMsg = function (success, msg) {
