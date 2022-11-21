@@ -835,6 +835,14 @@ class SolusVM {
             }
             $cparams["displaygraphs"] = 1;
         }
+        
+        if ( $this->getExtData( "tun-enable" ) != "disable" ) {
+            $cparams["displaytunenable"] = 1;
+        }
+        
+        if ( $this->getExtData( "tun-disable" ) != "disable" ) {
+            $cparams["displaytundisable"] = 1;
+        }
 
         return $cparams;
     }

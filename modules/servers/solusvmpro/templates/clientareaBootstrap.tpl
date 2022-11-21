@@ -207,6 +207,18 @@
                                value="{$LANG.solusvmpro_manage}">
                     </form>
                 </span><br/>
+                <span id="displaytunenable" style="display: none">
+                    <button class="btn btn-default"
+                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=tuntap_enable'">
+                        {$LANG.solusvmpro_tuntap_enable}
+                    </button>
+                </span>
+                <span id="displaytundisable" style="display: none">
+                    <button class="btn btn-default"
+                            onclick="window.location='clientarea.php?action=productdetails&id={$serviceid}&serveraction=custom&a=tuntap_disable'">
+                        {$LANG.solusvmpro_tuntap_disable}
+                    </button>
+                </span>
             </div>
         </div>
         <div class="row">

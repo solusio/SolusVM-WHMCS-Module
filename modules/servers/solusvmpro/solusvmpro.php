@@ -538,6 +538,8 @@ function solusvmpro_AdminCustomButtonArray() {
         $_LANG["solusvmpro_reboot"]   => "reboot",
         $_LANG["solusvmpro_shutdown"] => "shutdown",
         $_LANG["solusvmpro_boot"]     => "boot",
+        $_LANG["solusvmpro_tuntap_enable"]  => "tuntap_enable",
+        $_LANG["solusvmpro_tuntap_disable"]  => "tuntap_disable",
     );
 }
 
@@ -548,6 +550,8 @@ function solusvmpro_ClientAreaCustomButtonArray() {
         $_LANG["solusvmpro_reboot"]   => "reboot",
         $_LANG["solusvmpro_shutdown"] => "shutdown",
         $_LANG["solusvmpro_boot"]     => "boot",
+        $_LANG["solusvmpro_tuntap_enable"]  => "tuntap_enable",
+        $_LANG["solusvmpro_tuntap_disable"]  => "tuntap_disable",
     );
 }
 
@@ -636,6 +640,76 @@ function solusvmpro_shutdown( $params ) {
         $solusvm->apiCall( 'vserver-shutdown', $callArray );
 
         if ( $solusvm->isSuccessResponse($solusvm->result) ) {
+            $result = "success";
+        } else {
+            $result = (string) $solusvm->result["statusmsg"];
+        }
+
+        return $result;
+    } catch ( Exception $e ) {
+        // Record the error in WHMCS's module log.
+        logModuleCall(
+            'shutdown',
+            __FUNCTION__,
+            $params,
+            $e->getMessage(),
+            $e->getTraceAsString()
+        );
+
+        return $e->getMessage();
+    }
+}
+
+################################################################################
+### TUN/TAP Enable function                                                  ###
+################################################################################
+
+function solusvmpro_tuntap_enable( $params ) {
+    try {
+        $solusvm     = new SolusVM( $params );
+        $customField = $solusvm->getParam( "customfields" );
+
+        ## The call string for the connection fuction
+        $callArray = array( "vserverid" => $customField["vserverid"] );
+
+        $solusvm->apiCall( 'vserver-tun-enable', $callArray );
+
+        if ( $solusvm->result["status"] == "success" ) {
+            $result = "success";
+        } else {
+            $result = (string) $solusvm->result["statusmsg"];
+        }
+
+        return $result;
+    } catch ( Exception $e ) {
+        // Record the error in WHMCS's module log.
+        logModuleCall(
+            'shutdown',
+            __FUNCTION__,
+            $params,
+            $e->getMessage(),
+            $e->getTraceAsString()
+        );
+
+        return $e->getMessage();
+    }
+}
+
+################################################################################
+### TUN/TAP Disable function                                                  ###
+################################################################################
+
+function solusvmpro_tuntap_disable( $params ) {
+    try {
+        $solusvm     = new SolusVM( $params );
+        $customField = $solusvm->getParam( "customfields" );
+
+        ## The call string for the connection fuction
+        $callArray = array( "vserverid" => $customField["vserverid"] );
+
+        $solusvm->apiCall( 'vserver-tun-disable', $callArray );
+
+        if ( $solusvm->result["status"] == "success" ) {
             $result = "success";
         } else {
             $result = (string) $solusvm->result["statusmsg"];
