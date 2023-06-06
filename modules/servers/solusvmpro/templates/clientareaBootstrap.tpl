@@ -94,6 +94,19 @@
     <div class="col-md-9" id="displayState">
         {$LANG.solusvmpro_loading}
     </div>
+    <div class="col-md-3">
+        {$LANG.solusvmpro_rebuild}
+    </div>
+    <div class="col-md-9">
+        <form action="#" method="post">
+            <select name="vserver_templates">
+                {foreach $data.templates as $item}
+                    <option value="{$item}">{$item}</option>
+                {/foreach}
+                <input type="submit" name="change_os" class="btn btn-primary margin-left-5" value="{$LANG.solusvmpro_submit_rebuild}">
+            </select>
+        </form>
+    </div>
     <div class="col-md-9" id="displayStateUnavailable" style="display: none">
         <strong>{$LANG.solusvmpro_unavailable}</strong>
     </div>
