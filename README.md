@@ -1,2 +1,4 @@
+## Используется на проектах
+[adminvps.ru](https://adminvps.ru)
 
-[SolusVM WHMCS Module Documentation](https://docs.solusvm.com/display/BET/SolusVM+WHMCS+billing+module)
+[cloudvps.by](https://cloudvps.by)
