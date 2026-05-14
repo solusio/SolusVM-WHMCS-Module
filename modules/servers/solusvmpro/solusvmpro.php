@@ -1230,12 +1230,14 @@ function solusvmpro_UsageUpdate($params)
 function solusvmpro_Custom_ChangeRescueMode( $params = '' ) {
     global $_LANG;
 
-    $rescueAction      = $_GET['rescueAction'];
-    $rescueValue       = $_GET['rescueValue'];
+    $allowedActions = array( 'rescueenable', 'rescuedisable' );
+    $rescueAction   = isset( $_GET['rescueAction'] ) ? $_GET['rescueAction'] : '';
 
-    if ( $rescueValue && $rescueAction) {
-        // The call string for the connection function
-        $callArray = array( 'vserverid' => $params['customfields']['vserverid'], $rescueAction => $rescueValue );
+    if ( in_array( $rescueAction, $allowedActions, true ) ) {
+        $callArray = array(
+            'vserverid'   => $params['customfields']['vserverid'],
+            $rescueAction => 1,
+        );
         $solusvm = new SolusVM( $params );
 
         $solusvm->apiCall( 'vserver-rescue', $callArray );
