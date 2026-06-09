@@ -1,8 +1,5 @@
 <?php
 
-// it needs to be removed
-exit();
-
 /**
  * @var $admin_user
  * The username of a administrator in your whmcs.
