@@ -4,7 +4,6 @@ if ( ! defined( "WHMCS" ) ) {
     die( "This file cannot be accessed directly" );
 }
 
-
 $_LANG['solusvmpro_reboot']                               = 'Reboot';
 $_LANG['solusvmpro_boot']                                 = 'Boot';
 $_LANG['solusvmpro_shutdown']                             = 'Shutdown';
@@ -104,4 +103,5 @@ $_LANG['solusvmpro_user']                                 = 'User';
 $_LANG['solusvmpro_port']                                 = 'Port';
 $_LANG['solusvmpro_rescueenabled']                        = 'Enabled - Rescue mode can take several minutes before it becomes accessible on the network';
 $_LANG['solusvmpro_rescuedisabled']                       = 'Disabled - The server is now rebooting into the original system';
-
+$_LANG['solusvmpro_tuntap_enable']                        = 'Enable TUN/TAP';
+$_LANG['solusvmpro_tuntap_disable']                       = 'Disable TUN/TAP';
