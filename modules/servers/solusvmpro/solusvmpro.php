@@ -918,7 +918,7 @@ if ( ! function_exists( 'solusvmpro_AdminLink' ) ) {
 function solusvmpro_Custom_ChangeHostname( $params = '' ) {
     global $_LANG;
 
-    $newhostname   = $_GET['newhostname'];
+    $newhostname   = isset( $_POST['newhostname'] ) ? $_POST['newhostname'] : '';
     $check_section = SolusVM::dns_verify_rdns_section( $newhostname );
     if ( $check_section ) {
         ## The call string for the connection function
@@ -976,7 +976,7 @@ function solusvmpro_Custom_ChangeHostname( $params = '' ) {
 function solusvmpro_Custom_ChangeRootPassword( $params = '' ) {
     global $_LANG;
 
-    $newrootpassword      = $_GET['newrootpassword'];
+    $newrootpassword      = isset( $_POST['newrootpassword'] ) ? $_POST['newrootpassword'] : '';
     $checkNewRootPassword = SolusVM::validateRootPassword( $newrootpassword );
     if ( $checkNewRootPassword ) {
         ## The call string for the connection function
@@ -1033,7 +1033,7 @@ function solusvmpro_Custom_ChangeRootPassword( $params = '' ) {
 function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
     global $_LANG;
 
-    $newvncpassword      = $_GET['newvncpassword'];
+    $newvncpassword      = isset( $_POST['newvncpassword'] ) ? $_POST['newvncpassword'] : '';
     $checkNewVNCPassword = SolusVM::validateVNCPassword( $newvncpassword );
     if ( $checkNewVNCPassword ) {
         ## The call string for the connection function
@@ -1094,9 +1094,10 @@ function solusvmpro_Custom_ChangeVNCPassword( $params = '' ) {
 
 function solusvmpro_ClientArea( $params ) {
     $notCustomFuntions = [ 'reboot', 'shutdown', 'boot' ];
-    if ( isset( $_GET['modop'] ) && ( $_GET['modop'] == 'custom' ) ) {
-        if ( isset( $_GET['a'] ) && !in_array( $_GET['a'], $notCustomFuntions ) ) {
-            $functionName = 'solusvmpro_' . 'Custom_' . $_GET['a'];
+    if ( isset( $_REQUEST['modop'] ) && ( $_REQUEST['modop'] == 'custom' ) ) {
+        if ( isset( $_REQUEST['a'] ) && !in_array( $_REQUEST['a'], $notCustomFuntions ) ) {
+            check_token();
+            $functionName = 'solusvmpro_' . 'Custom_' . $_REQUEST['a'];
             if ( function_exists( $functionName ) ) {
                 $functionName( $params );
             } else {
@@ -1231,7 +1232,7 @@ function solusvmpro_Custom_ChangeRescueMode( $params = '' ) {
     global $_LANG;
 
     $allowedActions = array( 'rescueenable', 'rescuedisable' );
-    $rescueAction   = isset( $_GET['rescueAction'] ) ? $_GET['rescueAction'] : '';
+    $rescueAction   = isset( $_POST['rescueAction'] ) ? $_POST['rescueAction'] : '';
 
     if ( in_array( $rescueAction, $allowedActions, true ) ) {
         $callArray = array(
