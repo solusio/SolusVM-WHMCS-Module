@@ -42,8 +42,10 @@ $(function () {
                 ac: 'Custom_ChangeRescueMode'
             };
 
+            ajaxData.token = token.indexOf('token=') !== -1 ? token.split('token=')[1] : token;
             $.ajax({
-                url: document.location.href + token,
+                type: "POST",
+                url: document.location.href.split('#')[0],
                 data: ajaxData,
                 cache: false,
                 dataType: 'json'/*,
