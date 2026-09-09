@@ -39,9 +39,10 @@ $(function () {
                 ajax: 1,
                 ac: 'Custom_ChangeHostname'
             };
+            ajaxData.token = token.indexOf('token=') !== -1 ? token.split('token=')[1] : token;
             $.ajax({
-                /*type: "POST",*/
-                url: document.location.href + token,
+                type: "POST",
+                url: document.location.href.split('#')[0],
                 data: ajaxData,
                 cache: false,
                 dataType: 'json'/*,

@@ -27,29 +27,30 @@
 
         if (!reload) {
             var vserverid = {/literal}{$data.vserverid}{literal};
+            var token = '&token={/literal}{$token}{literal}';
             window.solusvmpro_get_and_fill_client_data(vserverid);
             window.solusvmpro_hostname(vserverid, {
                 'solusvmpro_invalidHostname': '{/literal}{$LANG.solusvmpro_invalidHostname}{literal}',
                 'solusvmpro_change': '{/literal}{$LANG.solusvmpro_change}{literal}'
-            });
+            }, token);
             window.solusvmpro_rootpassword(vserverid, {
                 'solusvmpro_invalidRootpassword': '{/literal}{$LANG.solusvmpro_invalidRootpassword}{literal}',
                 'solusvmpro_change': '{/literal}{$LANG.solusvmpro_change}{literal}',
                 'solusvmpro_confirmRootPassword': '{/literal}{$LANG.solusvmpro_confirmRootPassword}{literal}',
                 'solusvmpro_confirmErrorPassword': '{/literal}{$LANG.solusvmpro_confirmErrorPassword}{literal}',
                 'solusvmpro_confirmPassword': '{/literal}{$LANG.solusvmpro_confirmPassword}{literal}'
-            });
+            }, token);
             window.solusvmpro_vncpassword(vserverid, {
                 'solusvmpro_invalidVNCpassword': '{/literal}{$LANG.solusvmpro_invalidVNCpassword}{literal}',
                 'solusvmpro_change': '{/literal}{$LANG.solusvmpro_change}{literal}',
                 'solusvmpro_confirmVNCPassword': '{/literal}{$LANG.solusvmpro_confirmVNCPassword}{literal}',
                 'solusvmpro_confirmErrorPassword': '{/literal}{$LANG.solusvmpro_confirmErrorPassword}{literal}',
                 'solusvmpro_confirmPassword': '{/literal}{$LANG.solusvmpro_confirmPassword}{literal}'
-            });
+            }, token);
             window.solusvmpro_rescuemode(vserverid, {
                 'solusvmpro_refresh': '{/literal}{$LANG.solusvmpro_refresh}{literal}',
                 'solusvmpro_processing': '{/literal}{$LANG.solusvmpro_processing}{literal}'
-            });
+            }, token);
 
             var cookieNameForAccordionGroup = 'solusvmpro_activeAccordionGroup_Client';
             var last = document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(cookieNameForAccordionGroup).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")
