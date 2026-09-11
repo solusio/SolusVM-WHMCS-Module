@@ -16,7 +16,7 @@ if ( ! defined( "WHMCS" ) ) {
     die( "This file cannot be accessed directly" );
 }
 
-if ( file_exists( ROOTDIR . "/custom.php" ) ) {
+if ( file_exists( ROOTDIR . "/modules/servers/solusvmpro/custom.php" ) ) {
     require_once( ROOTDIR . "/modules/servers/solusvmpro/custom.php" );
 }
 
